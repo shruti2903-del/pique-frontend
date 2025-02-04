@@ -5999,7 +5999,8 @@ fieldset:disabled .btn {
     z-index: 1040;
     width: 100vw;
     height: 100vh;
-    background-color: #000
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.3;
 }
 
 .modal-backdrop.fade {

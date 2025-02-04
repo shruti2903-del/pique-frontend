@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function EnterDashNavbar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     // Sidebar toggler functionality
     $(".sidebar-toggler").click(function () {
@@ -11,14 +11,13 @@ export default function EnterDashNavbar() {
     });
   }, []);
 
-  function handleLogout() {
+  function handleLogout(e) {
+    e.preventDefault();
     localStorage.clear();
-    document.querySelector(".btn-close").click(); 
-    if (!localStorage.getItem("token")) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
+   
+      document.querySelector(".btn-close").click(); 
+      navigate("/login"); 
+   
   }
   return (
     <>

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import Navbar from "../components/Navbar";
 import axios from "axios";
 import Input from "../components/Input";
+import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
+import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -17,9 +18,14 @@ const Signup = () => {
     role: "venue",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showCPassword, setShowCPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
+  };
+
+  const toggleCPasswordVisibility = () => {
+    setShowCPassword((prevState) => !prevState);
   };
 
   const handleRoleSelection = (role) => {
@@ -110,17 +116,20 @@ const Signup = () => {
           content={`Register as a new  ${formData.role} and get started with our platform.`}
         />
       </Helmet>
-      <Navbar />
-      <div className="container min-vh-100 mt-3">
-        <div className="row d-flex">
-          <h1 className="fw-bold mt-5">Sign Up</h1>
+      <PiqueNavbar />
+      <div className="container min-vh-100 ">
+        <div className="row d-flex mt-5">
+          <h1 className="fw-bold mt-5 text-center"></h1>
         </div>
         <div className="row">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
-            <img
-              src="/src/assets/images/registeruser.avif"
-              className="img-fluid h-100 w-100"
-              alt="register"
+            <video
+              src="/src/assets/images/Register.mp4"
+              className="img-fluid"
+              style={{ height: "80%" }}
+              autoPlay
+              loop
+              muted
             />
           </div>
           <div className="col-md-6 col-sm-12">
@@ -179,7 +188,9 @@ const Signup = () => {
                       }
                     />
                     {errors.phoneNumber && (
-                      <p className="text-danger text-start">{errors.phoneNumber}</p>
+                      <p className="text-danger text-start">
+                        {errors.phoneNumber}
+                      </p>
                     )}
                   </div>
 
@@ -213,11 +224,13 @@ const Signup = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                       }
-                      showPassword={true}
+                      showPassword={showPassword}
                       togglePasswordVisibility={togglePasswordVisibility}
                     />
                     {errors.password && (
-                      <p className="text-danger text-start">{errors.password}</p>
+                      <p className="text-danger text-start">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
@@ -227,24 +240,26 @@ const Signup = () => {
                     </label>
 
                     <Input
-                      type={showPassword ? "text" : "password"}
+                      type={showCPassword ? "text" : "password"}
                       name="cpassword"
                       placeholder="Confirm your password"
                       value={formData.cpassword}
                       onChange={(e) =>
                         setFormData({ ...formData, cpassword: e.target.value })
                       }
-                      showPassword={true}
-                      togglePasswordVisibility={togglePasswordVisibility}
+                      showPassword={showCPassword}
+                      togglePasswordVisibility={toggleCPasswordVisibility}
                     />
                     {errors.cpassword && (
-                      <p className="text-danger text-start">{errors.cpassword}</p>
+                      <p className="text-danger text-start">
+                        {errors.cpassword}
+                      </p>
                     )}
                   </div>
 
                   <Button
                     type="submit"
-                    className=" btn-primary text-white"
+                    className=" btn-primary text-white w-100"
                     label="Signup"
                   />
                 </form>
@@ -264,6 +279,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
+      <PiqueFooter />
     </>
   );
 };

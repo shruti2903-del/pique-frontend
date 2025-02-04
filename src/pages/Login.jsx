@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Input from "../components/Input";
+import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
+import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
-const Login = () => {
+const Login = ({setIsLoggedIn,setRole}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -14,6 +15,7 @@ const Login = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,40 +27,45 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}auth/login`, formData);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}auth/login`,
+        formData
+      );
       console.log("Login successful", response.data);
-      localStorage.setItem("token", response.data.access_token);
-      const token = localStorage.getItem("token");
+      const token = response.data.access_token;
+      const role = response.data.role;
+      const userId = response.data.userId;
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("status", response.data.status);
 
-      const url = `${import.meta.env.VITE_API_URL}auth/profile`
-      console.log(url)
-
-      const profileResponse = await axios.post(url, {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-      console.log(profileResponse.data);
-      localStorage.setItem("profile", JSON.stringify(profileResponse.data)); 
-      localStorage.setItem("userId", profileResponse.data.userId)
-
-      if (profileResponse.data.role === "venue") {
-        navigate("/venuedash");
-      } else if (profileResponse.data.role === "entertainer") {
-        navigate("/entertainerdash");
-      } else {
-        console.log("Unknown role");
+      setIsLoggedIn(true);
+      setRole(role); 
+      const status = localStorage.getItem("status");
+      if (response.data.role === "venue" && status === "pending") {
+        navigate("/statusverification");
+      } else if (response.data.role === "venue" && status === "active") {
+        navigate("/loggedin/venuedash");
+      }else if (response.data.role === "entertainer" && status === "pending"){
+        navigate("/statusverification");
+      }else if (response.data.role === "entertainer" && status === "active") {
+        navigate("/loggedin/entertainerdash");
+      }else{
+        navigate("/error");
       }
     } catch (error) {
       console.error("Login error", error);
-      setErrorMessage(error.response?.data?.message || "An error occurred. Please try again.");
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
     }
+  };
+
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -70,17 +77,20 @@ const Login = () => {
           content="Login to your account to access personalized features and services."
         />
       </Helmet>
-      <Navbar />
-      <div className="container min-vh-100 mt-5">
-        <div className="row text-center d-flex justify-content-center">
-          <h1 className="fw-bold mt-3">Login</h1>
+      <PiqueNavbar/>
+      <div className="container min-vh-100 ">
+        <div className="row text-center d-flex justify-content-center mt-5">
+          <h1 className="fw-bold mt-5">Login</h1>
         </div>
         <div className="row d-flex justify-content-around mt-3">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
-            <img
-              src="/src/assets/images/loginuser.avif"
-              className="img-fluid h-75 w-100"
-              alt="login"
+            <video
+              src="/src/assets/images/Login.mp4"
+              className="img-fluid"
+              style={{height:"80%"}}
+              autoPlay
+            loop
+            muted
             />
           </div>
           <div className="col-md-6 col-sm-12">
@@ -104,16 +114,22 @@ const Login = () => {
 
                   <div className="row">
                     <Input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
+                      showPassword={showPassword}
+                      togglePasswordVisibility={togglePasswordVisibility}
                     />
                   </div>
                   <div className="row">
                     <div className="col d-flex justify-content-center">
-                      <Button type="submit" className="btn-primary w-100 fw-bold" label="Login" />
+                      <Button
+                        type="submit"
+                        className="btn-primary w-100 fw-bold"
+                        label="Login"
+                      />
                     </div>
                   </div>
                 </form>
@@ -132,6 +148,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <PiqueFooter/>
     </>
   );
 };

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Helmet } from "react-helmet-async";
-import EnterDashSidebar from "../../components/Entertainer/EnterDashSidebar";
-import EnterDashNavbar from "../../components/Entertainer/EnterDashNavbar";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import RadioButton from "../../components/RadioButton";
 import Button from "../../components/Button";
+import DashLayoutEnter from "../../components/Entertainer/DashLayoutEnter";
+import PiqueFooter from "../../components/PiqueComponents/PiqueFooter";
 
 export default function EditEntertainer() {
     const [formData, setFormData] = useState({
@@ -105,21 +104,9 @@ export default function EditEntertainer() {
     
   return (
     <>
-      <Helmet>
-        <title>Edit Profile</title>
-        <meta
-          name="description"
-          content="Edit your profile by necessary informations."
-        />
-      </Helmet>
-      <div className="container-xxl position-relative bg-white d-flex p-0">
-        <EnterDashSidebar />
+      <DashLayoutEnter title="Update Profile" description="View and update your profile">
+      <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
 
-        {/* <!-- Content Start --> */}
-        <div className="content">
-          {/* <!-- Navbar Start --> */}
-          <EnterDashNavbar />
-          {/* <!-- Navbar End --> */}
           <div className="row">
             <div className="col-md-12 mt-4">
               <h2 className="text-secondary text-center">Edit Profile</h2>
@@ -377,8 +364,9 @@ export default function EditEntertainer() {
               </form>
             </div>
           </div>
-        </div>
       </div>
+      <PiqueFooter/>
+      </DashLayoutEnter>
     </>
   );
 }

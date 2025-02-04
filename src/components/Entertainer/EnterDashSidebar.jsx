@@ -27,7 +27,7 @@ export default function EnterDashSidebar() {
         </div>
         <div className="navbar-nav text-start w-100">
           <NavLink
-            to="/entertainerdash"
+            to="/loggedin/entertainerdash"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
@@ -35,7 +35,7 @@ export default function EnterDashSidebar() {
             <i className="fa-solid fa-gauge me-2"></i>Dashboard
           </NavLink>
           <NavLink
-            to="/entertainerprofile"
+            to="/loggedin/entertainerprofile"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
@@ -44,7 +44,7 @@ export default function EnterDashSidebar() {
           </NavLink>
           
           <NavLink
-            to="/bookingrequests"
+            to="/loggedin/bookingrequest"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
@@ -52,7 +52,7 @@ export default function EnterDashSidebar() {
             <i className="fa-solid fa-bell me-2 mt-2"></i>Booking Requests
           </NavLink>
           <NavLink
-            to="/bookingcalendar"
+            to="/loggedin/bookingcalendar"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }

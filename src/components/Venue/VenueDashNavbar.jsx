@@ -1,29 +1,33 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function VenueDashNavbar() {
-  const navigate = useNavigate()
+export default function PiqueNavbar() {
+  const navigate = useNavigate();
+
+  // Sidebar toggler functionality
   useEffect(() => {
-    // Sidebar toggler functionality
     $(".sidebar-toggler").click(function () {
       $(".sidebar, .content").toggleClass("open");
       return false;
     });
   }, []);
 
-  function handleLogout() {
+  // Handle logout
+  function handleLogout(e) {
+    e.preventDefault();
     localStorage.clear();
-    document.querySelector(".btn-close").click(); 
-    if (!localStorage.getItem("token")) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
+    document.querySelector(".btn-close").click();
+    navigate("/login");
   }
+
   return (
     <>
-      <nav className="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0 w-100">
-        <a href="index.html" className="navbar-brand d-flex d-lg-none me-4">
+      <div className="container-fluid mainNavbar">
+        <div className="row">
+          <nav className="navbar navbar-expand-lg px-4">
+            <div className="container">
+           
+              <a href="index.html" className="navbar-brand d-flex d-lg-none ">
           <h2 className="text-primary mb-0">
             <i className="fa fa-hashtag"></i>
           </h2>
@@ -31,23 +35,37 @@ export default function VenueDashNavbar() {
         <a href="#" className="sidebar-toggler flex-shrink-0">
           <i className="fa fa-bars"></i>
         </a>
-        <form className="d-none d-md-flex ms-4">
-          <input
-            className="form-control border-0"
-            type="search"
-            placeholder="Search"
-          />
-        </form>
-        <div className="navbar-nav align-items-center ms-auto">
-          <div className="nav-item">
-            <a href="#" className="nav-link text-danger" data-bs-toggle="modal" data-bs-target="#logoutModal" >
-              <i className="fa-solid fa-right-from-bracket me-lg-2"></i>
-              <span className="d-none d-lg-inline-flex">Logout</span>
-            </a>
-          </div>
-        </div>
-      </nav>
 
+              {/* Navbar Links */}
+              <div className="collapse navbar-collapse" id="navbarContent">
+                {/* <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+                  
+                </ul> */}
+
+                {/* Right-Side Buttons */}
+                <div className="d-flex align-items-center ">
+                  
+
+                  {/* Logout Link */}
+                  <div className="nav-item ">
+                    <a
+                      href="#"
+                      className="nav-link text-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#logoutModal"
+                    >
+                      <i className="fa-solid fa-right-from-bracket me-lg-2"></i>
+                      <span className="d-none d-lg-inline-flex">Logout</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      {/* Logout Modal */}
       <div
         className="modal fade"
         id="logoutModal"
