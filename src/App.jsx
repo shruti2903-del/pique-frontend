@@ -56,11 +56,11 @@ console.log(isLoggedIn,role)
 
 
           {/* protected routes */}
-          <Route path="/loggedin/*" element={
+          <Route path="/user" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               {role === "venue" ? (
                 <Routes>
-                  <Route path="venuedash" element={<VenueDash />} />
+                  <Route path="/" element={<VenueDash />} />
                   <Route path="venueprofile" element={<VenueProfile />} />
                   <Route path="allentertainer" element={<AllEntertainer />} />
                   <Route path="allbookings" element={<AllBookings />} />
@@ -72,7 +72,7 @@ console.log(isLoggedIn,role)
                 </Routes>
               ) : role === "entertainer" ? (
                 <Routes>
-                  <Route path="entertainerdash" element={<EntertainerDash />} />
+                  <Route path="/" element={<EntertainerDash />} />
                   <Route path="entertainerprofile" element={<EntertainerProfile />} />
                   <Route path="bookingrequest" element={<BookingRequest />} />
 

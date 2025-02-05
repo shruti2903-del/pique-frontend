@@ -44,14 +44,22 @@ const Login = ({setIsLoggedIn,setRole}) => {
       setIsLoggedIn(true);
       setRole(role); 
       const status = localStorage.getItem("status");
-      if (response.data.role === "venue" && status === "pending") {
-        navigate("/statusverification");
-      } else if (response.data.role === "venue" && status === "active") {
-        navigate("/loggedin/venuedash");
-      }else if (response.data.role === "entertainer" && status === "pending"){
-        navigate("/statusverification");
-      }else if (response.data.role === "entertainer" && status === "active") {
-        navigate("/loggedin/entertainerdash");
+      // if (response.data.role === "venue" && status === "pending") {
+      //   navigate("/statusverification");
+      // } else if (response.data.role === "venue" && status === "active") {
+      //   navigate("/loggedin/venuedash");
+      // }else if (response.data.role === "entertainer" && status === "pending"){
+      //   navigate("/statusverification");
+      // }else if (response.data.role === "entertainer" && status === "active") {
+      //   navigate("/loggedin/entertainerdash");
+      // }else{
+      //   navigate("/error");
+      // }
+
+      if(response.data.role === "venue"){
+        navigate("/user/")
+      }else if(response.data.role === "entertainer"){
+        navigate("/user/")
       }else{
         navigate("/error");
       }

@@ -75,11 +75,11 @@ export default function AllVenues() {
   return (
     <DashLayoutVenue title="Venue List" description="Update and delete your venue.">
       <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-        <div className="row mt-4">
+        <div className="mt-4">
           <div className="col-md-12">
             <div className="d-flex justify-content-between align-items-center mb-3 pe-3">
               <div className="mx-auto">
-                <h2 className="text-secondary text-center mb-0">All Venues</h2>
+                <h4 className="text-dark text-center mb-0">All Venues</h4>
               </div>
               <Button className="btn-danger d-flex align-items-center" onClick={() => navigate("/loggedin/addvenue")}>
                 <i className="fa-solid fa-plus me-2"></i> Add Venue
@@ -89,17 +89,17 @@ export default function AllVenues() {
             {error ? (
               <p className="text-center text-danger">{error}</p>
             ) : venues.length > 0 ? (
-              <div className="table-responsive mt-5">
+              <div className="table-responsive">
                 <table className="table">
                   <thead>
-                    <tr>
-                      <th>Sr.No.</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone Number</th>
-                      <th>Website URL</th>
-                      <th>Timings</th>
-                      <th>Actions</th>
+                    <tr >
+                      <th className="text-secondary">Sr.No.</th>
+                      <th className="text-secondary">Name</th>
+                      <th className="text-secondary">Email</th>
+                      <th className="text-secondary">Phone Number</th>
+                      <th className="text-secondary">Website URL</th>
+                      <th className="text-secondary">Timings</th>
+                      <th className="text-secondary">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -112,8 +112,8 @@ export default function AllVenues() {
                         <td>{venue.websiteUrl}</td>
                         <td>{venue.timings}</td>
                         <td>
-                          <Button className="btn-warning me-2" onClick={() => handleEdit(venue.id)} label="Edit" />
-                          <Button className="btn-danger" onClick={() => handleDeleteClick(venue.id)} label="Delete" />
+                          <Button className="btn-warning me-2 rounded-circle shadow" onClick={() => handleEdit(venue.id)} ><i className="fa-solid fa-pen-to-square"></i></Button>
+                          <Button className="btn-danger rounded-circle shadow" onClick={() => handleDeleteClick(venue.id)}><i className="fa-solid fa-trash"></i></Button>
                         </td>
                       </tr>
                     ))}
