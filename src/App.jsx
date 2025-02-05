@@ -56,7 +56,7 @@ console.log(isLoggedIn,role)
 
 
           {/* protected routes */}
-          <Route path="/user" element={
+          <Route path="/user/*" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               {role === "venue" ? (
                 <Routes>

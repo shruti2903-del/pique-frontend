@@ -87,13 +87,13 @@ const Login = ({setIsLoggedIn,setRole}) => {
       </Helmet>
       <PiqueNavbar/>
       <div className="container min-vh-100 ">
-        <div className="row text-center d-flex justify-content-center mt-5">
-          <h1 className="fw-bold mt-5">Login</h1>
+        <div className="row text-center d-flex justify-content-center">
+          <h1 className="fw-bold mt-3">Login</h1>
         </div>
         <div className="row d-flex justify-content-around mt-3">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
             <video
-              src="/src/assets/images/Login.mp4"
+              src="assets/images/Login.mp4"
               className="img-fluid"
               style={{height:"80%"}}
               autoPlay

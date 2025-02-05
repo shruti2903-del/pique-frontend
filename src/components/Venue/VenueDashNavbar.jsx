@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "../Button";
-import "bootstrap/dist/css/bootstrap.min.css"; 
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; 
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 export default function VenueDashNavbar() {
   return (
     <nav className="navbar navbar-expand-lg fixed-top">
       <div className="container-fluid">
-        
-       
+
+
         <a href="index.html" className="navbar-brand">
-          <img src="/src/assets/pique/image/logo.jpg" alt="Logo" className="w-50" />
+          <img src="../assets/pique/image/logo.jpg" alt="Logo" className="w-50" />
         </a>
 
         {/* Right Side Items */}
@@ -27,7 +27,7 @@ export default function VenueDashNavbar() {
               aria-expanded="false"
             >
               <img
-                src="/src/assets/images/userpic.jpg"
+                src="/assets/images/userpic.jpg"
                 alt="User"
                 className="rounded-circle"
                 style={{ width: "40px", height: "40px" }}

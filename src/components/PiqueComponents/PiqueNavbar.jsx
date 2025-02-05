@@ -9,9 +9,9 @@ export default function PiqueNavbar() {
         <nav id="navbar1" className="navbar navbar-expand-lg px-4">
           <div className="container">
             {/* <!-- Logo Section --> */}
-            <a className="navbar-brand d-flex align-items-center" href="/">
-              <img src="src/assets/pique/image/logo.png" alt="logo" className="logoMain" />
-            </a>
+            <Link className="navbar-brand d-flex align-items-center" to="/">
+              <img src="../assets/pique/image/logo.png" alt="logo" className="logoMain" />
+            </Link>
 
             {/* <!-- Toggle Button for Mobile View --> */}
             <button
@@ -30,27 +30,27 @@ export default function PiqueNavbar() {
             <div className="collapse navbar-collapse" id="navbarContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0 me-3">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="#">Services</a>
+                  <Link className="nav-link active" aria-current="page" to="#">Services</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">Why We</a>
+                  <Link className="nav-link" to="#">Why We</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">About</a>
+                  <Link className="nav-link" to="#">About</Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#">Blog</a>
+                  <Link className="nav-link" to="#">Blog</Link>
                 </li>
               </ul>
 
               {/* <!-- Right-Side Buttons --> */}
               <div className="d-flex align-items-center">
-                <a href="/signup/venue" className="btn myBTNB me-3">
+                <Link to="/signup/venue" className="btn myBTNB me-3">
                   Register <i className="fa-solid fa-arrow-up"></i>
-                </a>
-                <a href="/login" className="btn myBTNB me-3">
+                </Link>
+                <Link to="/login" className="btn myBTNB me-3">
                   Login <i className="fa-solid fa-arrow-up"></i>
-                </a>
+                </Link>
                 <div className="dropdown">
                   <button
                     className="btn flagBG dropdown-toggle"
@@ -59,15 +59,15 @@ export default function PiqueNavbar() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <img src="src/assets/pique/image/usa.png" alt="India" width="20" /><span
+                    <img src="../assets/pique/image/usa.png" alt="India" width="20" /><span
                       className="ms-1">USA</span>
                   </button>
                   <ul
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
-                    <li><a className="dropdown-item" href="#">USA</a></li>
-                    <li><a className="dropdown-item" href="#">UK</a></li>
+                    <li><Link className="dropdown-item" to="#">USA</Link></li>
+                    <li><Link className="dropdown-item" to="#">UK</Link></li>
                   </ul>
                 </div>
               </div>

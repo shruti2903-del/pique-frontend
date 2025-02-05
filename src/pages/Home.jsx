@@ -4,6 +4,38 @@ import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
 import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
 export default function Home() {
+  const images = [
+    "assets/pique/image/bannerperson.png",
+    "assets/pique/image/bannerperson1.png",
+    "assets/pique/image/bannerperson2.png",
+  ];
+  let index = 0;
+  setInterval(() => {
+    index = (index + 1) % images.length;
+    document.getElementById("changingImage").src = images[index];
+  }, 2000);
+  document.addEventListener("DOMContentLoaded", function () {
+    const changingImage = document.getElementById("changingImage");
+    const slideImageDiv = document.querySelector(".slideImage");
+
+    const images = [
+      "assets/pique/image/bannerperson.png",
+      "assets/pique/image/bannerperson1.png",
+      "assets/pique/image/bannerperson2.png",
+    ];
+    let index = 0;
+
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      changingImage.src = images[index];
+
+      if (images[index] === "assets/pique/image/bannerperson2.png") {
+        slideImageDiv.classList.add("active-slider"); // Add class when bannerperson2.png is active
+      } else {
+        slideImageDiv.classList.remove("active-slider"); // Remove class for other images
+      }
+    }, 2000);
+  });
   return (
     <>
       <Helmet>
@@ -42,19 +74,19 @@ export default function Home() {
                   </div>
                   <div className="col-md-6 order-1 order-md-2 ps-0 position-relative">
                     <img
-                      src="src/assets/pique/image/venue-icon.png"
+                      src="assets/pique/image/venue-icon.png"
                       alt="venue-icon"
                       className="img-fluid venuiconBH a4"
                     />
                     <div className="enterImg">
                       <h3 className="heading a3">For Venues</h3>
                       <img
-                        src="src/assets/pique/image/fireboX.gif"
+                        src="assets/pique/image/fireboX.gif"
                         alt="fireboX"
                         className="img-fluid fireIMG"
                       />
                       <img
-                        src="src/assets/pique/image/venue.png"
+                        src="assets/pique/image/venue.png"
                         alt="venue"
                         className="img-fluid"
                       />
@@ -84,19 +116,19 @@ export default function Home() {
                   </div>
                   <div className="col-md-6 order-1 order-md-2 ps-0 position-relative">
                     <img
-                      src="src/assets/pique/image/entertainers-icon.png"
+                      src="assets/pique/image/entertainers-icon.png"
                       alt="venue-icon"
                       className="img-fluid venuiconBH"
                     />
                     <div className="enterImg">
                       <h3 className="heading a2">For Entertainers</h3>
                       <img
-                        src="src/assets/pique/image/fireboX.gif"
+                        src="assets/pique/image/fireboX.gif"
                         alt="fireboX"
                         className="img-fluid fireIMG"
                       />
                       <img
-                        src="src/assets/pique/image/enterprise.png"
+                        src="assets/pique/image/enterprise.png"
                         alt="enterprise"
                         className="img-fluid"
                       />
@@ -117,7 +149,7 @@ export default function Home() {
             <div className="dashboard-banner position-relative">
               {/* <!-- Background Image --> */}
               <img
-                src="src/assets/pique/image/homeBanner.png"
+                src="assets/pique/image/homeBanner.png"
                 alt="dashboardImage"
                 className="img-fluid w-100"
               />
@@ -132,7 +164,7 @@ export default function Home() {
                       Click Here
                       <span>
                         <img
-                          src="src/assets/pique/image/btnanimation.gif"
+                          src="assets/pique/image/btnanimation.gif"
                           alt="btnanimation"
                           className="anmBTN"
                         />
@@ -144,7 +176,7 @@ export default function Home() {
                   <div className="slideImage">
                     <img
                       id="changingImage"
-                      src="src/assets/pique/image/bannerperson2.png"
+                      src="assets/pique/image/bannerperson2.png"
                       alt="bannerperson"
                       className="img-fluid personBH"
                     />
@@ -159,7 +191,7 @@ export default function Home() {
                     <a href="#" className="btn myBTN">
                       <span>
                         <img
-                          src="src/assets/pique/image/btnanimation.gif"
+                          src="assets/pique/image/btnanimation.gif"
                           alt="btnanimation"
                           className="anmBTN"
                         />

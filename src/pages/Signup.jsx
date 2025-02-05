@@ -118,18 +118,16 @@ const Signup = () => {
       </Helmet>
       <PiqueNavbar />
       <div className="container min-vh-100 ">
-        <div className="row d-flex mt-5">
-          <h1 className="fw-bold mt-5 text-center"></h1>
+        <div className="row d-flex">
+          <h1 className="fw-bold mt-5 text-center">Sign Up</h1>
         </div>
         <div className="row">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
-            <video
-              src="/src/assets/images/Register.mp4"
+            <img
+              src="../assets/images/registeruser.avif"
               className="img-fluid"
               style={{ height: "80%" }}
-              autoPlay
-              loop
-              muted
+              alt="user"
             />
           </div>
           <div className="col-md-6 col-sm-12">
