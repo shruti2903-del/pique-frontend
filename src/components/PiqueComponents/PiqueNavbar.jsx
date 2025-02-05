@@ -45,10 +45,10 @@ export default function PiqueNavbar() {
 
               {/* <!-- Right-Side Buttons --> */}
               <div className="d-flex align-items-center">
-                <a href="#" className="btn myBTNB me-3">
+                <a href="/venue/signup" className="btn myBTNB me-3">
                   Register <i className="fa-solid fa-arrow-up"></i>
                 </a>
-                <a href="#" className="btn myBTNB me-3">
+                <a href="/login" className="btn myBTNB me-3">
                   Login <i className="fa-solid fa-arrow-up"></i>
                 </a>
                 <div className="dropdown">
