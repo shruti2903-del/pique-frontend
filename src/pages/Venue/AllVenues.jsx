@@ -40,7 +40,7 @@ export default function AllVenues() {
   const handleEdit = (id) => {
     setVenueId(id);
     localStorage.setItem("venueId", id);
-    navigate("/loggedin/venueprofile");
+    navigate("/user/profile");
   };
 
   const handleDeleteClick = (id) => {
@@ -75,13 +75,13 @@ export default function AllVenues() {
   return (
     <DashLayoutVenue title="Venue List" description="Update and delete your venue.">
       <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-        <div className="mt-4">
+        <div className="mt-5">
           <div className="col-md-12">
             <div className="d-flex justify-content-between align-items-center mb-3 pe-3">
               <div className="mx-auto">
                 <h4 className="text-dark text-center mb-0">All Venues</h4>
               </div>
-              <Button className="btn-danger d-flex align-items-center" onClick={() => navigate("/loggedin/addvenue")}>
+              <Button className="btn-danger d-flex align-items-center" onClick={() => navigate("/user/add")}>
                 <i className="fa-solid fa-plus me-2"></i> Add Venue
               </Button>
             </div>

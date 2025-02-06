@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function PiqueNavbar() {
   return (
     <>
-    <div className="container-fluid mainNavbar">
+    <div className="container-fluid mainNavbar fixed-top">
       <div className="row">
         <nav id="navbar1" className="navbar navbar-expand-lg px-4">
           <div className="container">
@@ -59,7 +59,7 @@ export default function PiqueNavbar() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <img src="../assets/pique/image/usa.png" alt="India" width="20" /><span
+                    <img src="/assets/pique/image/usa.png" alt="India" width="20" /><span
                       className="ms-1">USA</span>
                   </button>
                   <ul

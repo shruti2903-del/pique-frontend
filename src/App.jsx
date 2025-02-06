@@ -1,6 +1,6 @@
 import "./App.css";
 import Login from "./pages/Login";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
@@ -21,8 +21,6 @@ import StatusVerification from "./pages/StatusVerification";
 import AllVenues from "./pages/Venue/AllVenues";
 import ErrorPage from "./pages/ErrorPage";
 
-
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [role, setRole] = useState(null);
@@ -35,56 +33,55 @@ function App() {
       setIsLoggedIn(true);
       setRole(storedRole);
     } else {
-      setIsLoggedIn(false); 
+      setIsLoggedIn(false);
     }
-  }, []);  
+  }, []);
 
-console.log(isLoggedIn,role)
+  console.log(isLoggedIn, role);
   return (
     <>
       <HelmetProvider>
         <Routes>
-
           {/* public routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setRole={setRole}/>} />
+          <Route
+            path="/login"
+            element={<Login setIsLoggedIn={setIsLoggedIn} setRole={setRole} />}
+          />
           <Route path="/signup/venue" element={<Signup />} />
           <Route path="/signup/entertainer" element={<Signup />} />
           <Route path="/statusverification" element={<StatusVerification />} />
           <Route path="/error" element={<ErrorPage />} />
 
-
-
           {/* protected routes */}
-          <Route path="/user/*" element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
-              {role === "venue" ? (
-                <Routes>
-                  <Route path="/" element={<VenueDash />} />
-                  <Route path="venueprofile" element={<VenueProfile />} />
-                  <Route path="allentertainer" element={<AllEntertainer />} />
-                  <Route path="allbookings" element={<AllBookings />} />
-                  <Route path="venuecalendar" element={<VenueCalendar />} />
-                  <Route path="addvenue" element={<AddVenue/>} />
-                  <Route path="allvenue" element={<AllVenues/>} />
+          <Route
+            path="/user/*"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                {role === "venue" ? (
+                  <Routes>
+                    <Route path="/" element={<VenueDash />} />
+                    <Route path="profile" element={<VenueProfile />} />
+                    <Route path="entertainers" element={<AllEntertainer />} />
+                    <Route path="bookings" element={<AllBookings />} />
+                    <Route path="calendar" element={<VenueCalendar />} />
+                    <Route path="add" element={<AddVenue />} />
+                    <Route path="allvenues" element={<AllVenues />} />
+                  </Routes>
+                ) : role === "entertainer" ? (
+                  <Routes>
+                    <Route path="/" element={<EntertainerDash />} />
+                    <Route path="profile" element={<EntertainerProfile />} />
+                    <Route path="bookingrequest" element={<BookingRequest />} />
 
-
-                </Routes>
-              ) : role === "entertainer" ? (
-                <Routes>
-                  <Route path="/" element={<EntertainerDash />} />
-                  <Route path="entertainerprofile" element={<EntertainerProfile />} />
-                  <Route path="bookingrequest" element={<BookingRequest />} />
-
-                  <Route path="editentertainer" element={<EditEntertainer />} />
-                  <Route path="bookingcalendar" element={<BookingCalendar />} />
-                </Routes>
-              ) : null}
-            </ProtectedRoute>
-          } />
-          
+                    <Route path="edit" element={<EditEntertainer />} />
+                    <Route path="calendar" element={<BookingCalendar />} />
+                  </Routes>
+                ) : null}
+              </ProtectedRoute>
+            }
+          />
         </Routes>
-
       </HelmetProvider>
     </>
   );

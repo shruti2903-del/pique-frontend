@@ -110,37 +110,5 @@ jQuery(document).ready(function ($) {
         });
       });
 
-      const container = document.querySelector(".visonWrap");
-      console.log("elemHeight");
-      container.addEventListener("click", (event) => {
-        const box1 = document.querySelector(".aboutUser1");
-        const box2 = document.querySelector(".aboutUser2");
-        if (event.target === box2) {
-          box1.classList.remove("aboutUser1");
-          box1.classList.add("aboutUser2");
-          box2.classList.remove("aboutUser2");
-          box2.classList.add("aboutUser1");
-        } else if (event.target.closest(".aboutUser2")) {
-          box1.classList.remove("aboutUser1");
-          box1.classList.add("aboutUser2");
-          box2.classList.remove("aboutUser2");
-          box2.classList.add("aboutUser1");
-        }
-        // var elemHeight = box1.offsetHeight;
-    
-        // box2.style.marginTop = "-39px";
-      });
-    
-      function fixAboutUser() {
-        const box1h = document.querySelector(".aboutUser1");
-        const box2h = document.querySelector(".aboutUser2");
-        var box1Height = box1h.offsetHeight;
-        var box2Height = box2h.offsetHeight;
-        var lessheight = box1Height;
-        if (box2Height < box1Height) {
-          lessheight = box2Height;
-        }
-        console.log(box1Height, box2Height, lessheight);
-        box2.style.marginTop = "-" + lessheight + "px";
-      }
-      fixAboutUser();
+      
+      

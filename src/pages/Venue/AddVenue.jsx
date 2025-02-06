@@ -221,7 +221,7 @@ export default function AddVenue() {
 
       console.log("Media upload response:", mediaUploadResponse.data);
       toast.success("Media uploaded successfully!");
-      navigate("/loggedin/allvenue");
+      navigate("/user/allvenues");
     } catch (error) {
       console.error(
         "Error uploading media:",

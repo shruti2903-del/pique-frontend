@@ -102,7 +102,7 @@ export default function AllEntertainer() {
     >
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
 
-      <div className="row mt-4">
+      <div className="row mt-5">
         <div className="col-md-12">
           <h2 className="text-secondary text-center mb-4">All Entertainers</h2>
           <div className="mb-4 mt-5">

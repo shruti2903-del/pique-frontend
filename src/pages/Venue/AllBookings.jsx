@@ -75,7 +75,7 @@ export default function AllBookings() {
   return (
     <DashLayoutVenue title="All Bookings" description="View all bookings made">
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-      <div className="row mt-4">
+      <div className="row mt-5">
         <div className="col-md-12">
           <h2 className="text-secondary text-center mb-4">All Bookings</h2>
           {loading ? (

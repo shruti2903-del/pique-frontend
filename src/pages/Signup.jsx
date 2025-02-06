@@ -119,9 +119,9 @@ const Signup = () => {
       <PiqueNavbar />
       <div className="container min-vh-100 ">
         <div className="row d-flex">
-          <h1 className="fw-bold mt-5 text-center">Sign Up</h1>
+          <h1 className="fw-bold mt-5 text-center"></h1>
         </div>
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
             <img
               src="../assets/images/registeruser.avif"

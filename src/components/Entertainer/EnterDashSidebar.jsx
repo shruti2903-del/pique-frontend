@@ -14,7 +14,7 @@ export default function EnterDashSidebar() {
           <div className="position-relative">
             <img
               className="rounded-circle"
-              src="/assets/images/userprofile.avif"
+              src="../assets/images/userprofile.avif"
               alt=""
               style={{ width: "40px", height: "40px" }}
             />
@@ -27,7 +27,7 @@ export default function EnterDashSidebar() {
         </div>
         <div className="navbar-nav text-start w-100">
           <NavLink
-            to="/user/entertainerdash"
+            to="/user/"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
@@ -35,7 +35,7 @@ export default function EnterDashSidebar() {
             <i className="fa-solid fa-gauge me-2"></i>Dashboard
           </NavLink>
           <NavLink
-            to="/user/entertainerprofile"
+            to="/user/profile"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
@@ -52,7 +52,7 @@ export default function EnterDashSidebar() {
             <i className="fa-solid fa-bell me-2 mt-2"></i>Booking Requests
           </NavLink>
           <NavLink
-            to="/user/bookingcalendar"
+            to="/user/calendar"
             className={({ isActive }) =>
               `nav-link  ${isActive ? "text-primary fw-bold " : ""}`
             }
