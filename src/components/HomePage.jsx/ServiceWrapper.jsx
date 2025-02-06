@@ -18,7 +18,7 @@ export default function ServiceWrapper() {
                   <div className="col-md-12">
                     <div className="serviceBox">
                       <img
-                        src="../assets/pique/image/service2.png"
+                        src="./assets/pique/image/service2.png"
                         alt="service"
                         className="img-fluid"
                       />
@@ -32,7 +32,7 @@ export default function ServiceWrapper() {
                           text ever since Lorem Ipsum
                         </p>
                         <img
-                          src="../assets/pique/image/service1.png"
+                          src="./assets/pique/image/service1.png"
                           alt="service"
                           style={{marginTop: "20px"}}
                           className="img-fluid imgserv"
@@ -46,7 +46,7 @@ export default function ServiceWrapper() {
               <div className="col-md-4">
                 <div className="serviceBox">
                   <img
-                    src="../assets/pique/image/service3.png"
+                    src="./assets/pique/image/service3.png"
                     alt="service"
                     className="img-fluid"
                   />

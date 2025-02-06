@@ -12,14 +12,14 @@ export default function HowItWorks() {
           {/* <!-- Left Box --> */}
           <div className="col-md-6 leftWrapper">
             <img
-              src="../assets/pique/image/orangeBG.png"
+              src="./assets/pique/image/orangeBG.png"
               alt="orangeBG"
               className="orangebgImage"
             />
             <div className="box">
               <div className="icon-container">
                 <img
-                  src="../assets/pique/image/venue-icon.png"
+                  src="./assets/pique/image/venue-icon.png"
                   alt="venue"
                   style={{height: "60px"}}
                 /><span className="ms-2">For Venues </span>
@@ -56,12 +56,12 @@ export default function HowItWorks() {
 
           {/* <!-- Right Box --> */}
           <div className="col-md-6 rightWrapper">
-            <img src="../assets/pique/image/blueBG.png" alt="blueBG" className="bluebgImage" />
+            <img src="./assets/pique/image/blueBG.png" alt="blueBG" className="bluebgImage" />
             <div className="box right-box text-end">
               <div className="icon-container">
                 For Entertainers<span className="ms-2"
                   ><img
-                    src="../assets/pique/image/entertainers-icon.png"
+                    src="./assets/pique/image/entertainers-icon.png"
                     alt="enterprise"
                     style={{height: "60px"}}
                 /></span>

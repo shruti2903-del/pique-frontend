@@ -13,7 +13,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="../assets/pique/image/testimonial.png"
+                    src="./assets/pique/image/testimonial.png"
                     alt="testimonial"
                     className="testimg"
                   />
@@ -45,7 +45,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="../assets/pique/image/testimonial.png"
+                    src="./assets/pique/image/testimonial.png"
                     alt="testimonial"
                     className="testimg"
                   />
@@ -77,7 +77,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="../assets/pique/image/testimonial.png"
+                    src="./assets/pique/image/testimonial.png"
                     alt="testimonial"
                     className="testimg"
                   />
@@ -109,7 +109,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="../assets/pique/image/testimonial.png"
+                    src="./assets/pique/image/testimonial.png"
                     alt="testimonial"
                     className="testimg"
                   />

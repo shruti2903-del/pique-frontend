@@ -25,12 +25,12 @@ export default function RatedReviewed() {
           <div className="col-md-6">
             <div className="ratedIMG position-relative">
               <img
-                src="../assets/pique/image/animationstar.gif"
+                src="./assets/pique/image/animationstar.gif"
                 alt="animationstar"
                 className="img-fluid anmitIMG"
                 style={{width:"250px"}}
               />
-              <img src="../assets/pique/image/rated.gif" alt="rated" className="img-fluid" />
+              <img src="./assets/pique/image/rated.gif" alt="rated" className="img-fluid" />
             </div>
           </div>
         </div>

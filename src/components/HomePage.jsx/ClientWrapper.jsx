@@ -8,22 +8,22 @@ export default function ClientWrapper() {
       <div className="container">
         <div id="logoSlider" className="owl-carousel owl-theme logo-slider">
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 1" />
+            <img src="./assets/pique/image/company.png" alt="Company 1" />
           </div>
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 2" />
+            <img src="./assets/pique/image/company.png" alt="Company 2" />
           </div>
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 3" />
+            <img src="./assets/pique/image/company.png" alt="Company 3" />
           </div>
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 4" />
+            <img src="./assets/pique/image/company.png" alt="Company 4" />
           </div>
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 5" />
+            <img src="./assets/pique/image/company.png" alt="Company 5" />
           </div>
           <div className="item">
-            <img src="../assets/pique/image/company.png" alt="Company 6" />
+            <img src="./assets/pique/image/company.png" alt="Company 6" />
           </div>
         </div>
       </div>

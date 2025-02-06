@@ -40,6 +40,8 @@ const Login = ({setIsLoggedIn,setRole}) => {
       localStorage.setItem("role", role);
       localStorage.setItem("userId", userId);
       localStorage.setItem("status", response.data.status);
+      localStorage.setItem("userName", response.data.name);
+
 
       setIsLoggedIn(true);
       setRole(role); 

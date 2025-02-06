@@ -5,7 +5,7 @@ const PerfectFit = () => {
     <div className="perfectWrap">
       <lottie-player
         className="dotslottie"
-        src="../assets/pique/image/Animation-1738578543085.json"
+        src="./assets/pique/image/Animation-1738578543085.json"
         background="transparent"
         speed="1"
         style={{
@@ -25,7 +25,7 @@ const PerfectFit = () => {
                 We are
                 <span>
                   <lottie-player
-                    src="../assets/pique/image/148006.json"
+                    src="./assets/pique/image/148006.json"
                     background="transparent"
                     speed="1"
                     style={{

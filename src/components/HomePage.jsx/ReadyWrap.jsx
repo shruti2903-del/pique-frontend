@@ -22,7 +22,7 @@ export default function ReadyWrap() {
                     <span className="clicdiv"> Click Here</span>
                     <span className="animdiv">
                       <img
-                        src="../assets/pique/image/btnanimation.gif"
+                        src="./assets/pique/image/btnanimation.gif"
                         alt="btnanimation"
                         className="anmBTN"
                       />
@@ -36,7 +36,7 @@ export default function ReadyWrap() {
                   <Link to="#" className="btn myBTN rounded-pill">
                     <span className="animdiv1">
                       <img
-                        src="../assets/pique/image/btnanimation.gif"
+                        src="./assets/pique/image/btnanimation.gif"
                         alt="btnanimation"
                         className="anmBTN"
                       />

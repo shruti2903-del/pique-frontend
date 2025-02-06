@@ -19,19 +19,19 @@ export default function Home() {
         <title>Pique Entertainment</title>
         <meta name="description" content="Welcome to our website." />
       </Helmet>
-      <PiqueNavbar />
       <div className="container-fluid">
-      <EntertainerVenueSection />
-      <BannerSlider />
-      <HowItWorks />
-      <PerfectFit />
-      <ClientWrapper />
-      <ServiceWrapper />
-      <RatedReviewed />
-<Testimonial/>
-<ReadyWrap/>
-</div>
-      <PiqueFooter />
+        <PiqueNavbar />
+        <EntertainerVenueSection />
+        <BannerSlider />
+        <HowItWorks />
+        <PerfectFit />
+        <ClientWrapper />
+        <ServiceWrapper />
+        <RatedReviewed />
+        <Testimonial />
+        <ReadyWrap />
+        <PiqueFooter />
+      </div>
     </>
   );
 }

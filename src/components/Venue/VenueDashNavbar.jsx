@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function VenueDashNavbar() {
   const navigate = useNavigate();
-
+  const name = localStorage.getItem("userName");
   function handleLogout(e) {
     e.preventDefault();
     localStorage.clear();
@@ -35,21 +35,21 @@ export default function VenueDashNavbar() {
       <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: "#fff7f5" }}>
         <div className="container-fluid">
           <a href="index.html" className="navbar-brand">
-            <img src="../assets/pique/image/logo.jpg" alt="Logo" className="w-50" />
+            <img src="../assets/pique/image/logo.png" alt="Logo" className="w-50 ms-4" />
           </a>
 
           {/* Right Side Items */}
           <div className="d-flex align-items-center ms-auto">
-            <Link className="nav-link mx-3 fw-bold" to="/faqs">
+            <Link className="nav-link mx-3 fw-bold" to="/user/">
               FAQs
             </Link>
-            <Link className="nav-link mx-3 fw-bold" to="/contact">
+            <Link className="nav-link mx-3 fw-bold" to="/user/">
               Contact Us
             </Link>
 
             {/* User Profile Button (Opens Offcanvas) */}
             <Button
-              className="btn shadow-none border-0 p-0"
+              className="btn shadow-none border-0 p-0 me-3"
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasRight"
               aria-controls="offcanvasRight"
@@ -58,8 +58,8 @@ export default function VenueDashNavbar() {
                 src="../assets/images/userpic.jpg"
                 alt="User"
                 className="rounded-circle"
-                style={{ width: "40px", height: "40px" }}
-              />
+                style={{ width: "50px", height: "50px" }}
+              /><i className="fa-solid fa-caret-down"></i>
             </Button>
           </div>
         </div>
@@ -68,43 +68,58 @@ export default function VenueDashNavbar() {
       {/* Offcanvas Menu */}
       <div className="offcanvas offcanvas-end rounded" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div className="offcanvas-header">
-          <h3 className="offcanvas-title" id="offcanvasRightLabel">Hey!!</h3>
+          <p className="offcanvas-title fw-semibold fs-5" id="offcanvasRightLabel">Hey!! {name}</p>
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
-        <a href="/user/allvenues" className="text-decoration-none fs-5 fw-semibold text-danger ms-3">
+        <Link to="/user/allvenues" className="text-decoration-none fs-5 fw-semibold text-danger ms-3">
           View Profile
-        </a>
+        </Link>
 
         <hr />
 
         <div className="offcanvas-body d-flex flex-column">
           <div className="col">
-            <div className="row shadow-sm p-1 mb-3">
-              <Link className="text-decoration-none text-black text-start fw-1" to="/user/entertainers">
+            <div className="row shadow-sm mb-4">
+              <div className="col fw-medium">
+              <i className="fa-solid fa-masks-theater"></i>
+              <Link className="text-decoration-none text-black text-start fw-1 ms-2" to="/user/entertainers">
                 Entertainers
               </Link>
             </div>
-            <div className="row shadow-sm p-1 mb-3">
-              <Link className="text-decoration-none text-black text-start fw-1" to="/user/bookings">
+              </div>
+              <div className="row shadow-sm mb-4">
+                <div className="col fw-medium">
+                <i className="fa-regular fa-calendar-check"></i>
+                <Link className="text-decoration-none text-black text-start fw-1 ms-3" to="/user/bookings">
                 Bookings
               </Link>
+                </div>
+
             </div>
-            <div className="row shadow-sm p-1 mb-3">
-              <Link className="text-decoration-none text-black text-start fw-1" to="/user/calendar">
+            <div className="row shadow-sm mb-4">
+              <div className="col fw-medium">
+              <i className="fa-solid fa-calendar-days"></i>
+              <Link className="text-decoration-none text-black text-start fw-1 ms-3" to="/user/calendar">
                 Calendar
               </Link>
+              </div>
+              
             </div>
-            <div className="row shadow-sm p-1 mb-3">
+            <div className="row shadow-sm mb-4">
               {/* Logout triggers modal */}
+              <div className="col fw-medium text-danger">
+              <i className="fa-solid fa-arrow-right-from-bracket"></i>
               <Link
-                className="text-decoration-none text-danger text-start fw-1"
+                className="text-decoration-none text-danger text-start fw-1 ms-3"
                 to="#"
                 data-bs-toggle="modal"
                 data-bs-target="#logoutModal"
               >
                 Logout
               </Link>
+              </div>
+             
             </div>
           </div>
         </div>

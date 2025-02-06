@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // base: '/front/',
+  base: '/p/',
   server: {
     historyApiFallback: true, // Ensures the SPA routes are handled correctly
   },

@@ -220,7 +220,7 @@ export default function VenueProfile() {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="row mt-4">
+          <div className="row mt-5">
             <div className="col-md-12">
             <Button
           onClick={() => navigate(-1)}

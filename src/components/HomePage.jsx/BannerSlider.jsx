@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 export default function BannerSlider() {
   const images = [
-    "../assets/pique/image/bannerperson.png",
-    "../assets/pique/image/bannerperson1.png",
-    "../assets/pique/image/bannerperson2.png",
+    "./assets/pique/image/bannerperson.png",
+    "./assets/pique/image/bannerperson1.png",
+    "./assets/pique/image/bannerperson2.png",
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -26,7 +26,7 @@ export default function BannerSlider() {
             <div className="dashboard-banner position-relative">
               {/* <!-- Background Image --> */}
               <img
-                src="../assets/pique/image/homeBanner.png"
+                src="./assets/pique/image/homeBanner.png"
                 alt="dashboardImage"
                 className="img-fluid w-100"
               />
@@ -41,7 +41,7 @@ export default function BannerSlider() {
                       Click Here
                       <span>
                         <img
-                          src="../assets/pique/image/btnanimation.gif"
+                          src="./assets/pique/image/btnanimation.gif"
                           alt="btnanimation"
                           className="anmBTN"
                         />
@@ -68,7 +68,7 @@ export default function BannerSlider() {
                     <Link to="#" className="btn myBTN rounded-pill">
                       <span>
                         <img
-                          src="../assets/pique/image/btnanimation.gif"
+                          src="./assets/pique/image/btnanimation.gif"
                           alt="btnanimation"
                           className="anmBTN"
                         />
