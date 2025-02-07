@@ -8,7 +8,6 @@ import VenueDash from "./pages/Venue/VenueDash";
 import EntertainerDash from "./pages/Entertainer/EntertainerDash";
 import AllEntertainer from "./pages/Venue/AllEntertainer";
 import EntertainerProfile from "./pages/Entertainer/EntertainerProfile";
-import EditEntertainer from "./pages/Entertainer/EditEntertainer";
 import BookingCalendar from "./pages/Entertainer/BookingCalendar";
 import VenueProfile from "./pages/Venue/VenueProfile";
 import VenueCalendar from "./pages/Venue/VenueCalendar";
@@ -73,8 +72,6 @@ function App() {
                     <Route path="/" element={<EntertainerDash />} />
                     <Route path="profile" element={<EntertainerProfile />} />
                     <Route path="bookingrequest" element={<BookingRequest />} />
-
-                    <Route path="edit" element={<EditEntertainer />} />
                     <Route path="calendar" element={<BookingCalendar />} />
                   </Routes>
                 ) : null}

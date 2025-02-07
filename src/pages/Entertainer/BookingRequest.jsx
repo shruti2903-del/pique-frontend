@@ -74,7 +74,7 @@ export default function BookingRequest() {
           <Toaster position="top-center" reverseOrder={false} />
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
 
-          <div className="row">
+          <div className="row mt-5">
             <div className="col-md-12 mt-4">
               <h2 className="text-secondary text-center">
                 All Booking Requests

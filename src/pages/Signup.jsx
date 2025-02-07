@@ -4,8 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import axios from "axios";
 import Input from "../components/Input";
-import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
-import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -71,11 +69,11 @@ const Signup = () => {
         : "Please enter a valid contact number.",
     };
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
 
-    if (Object.values(newErrors).some((error) => error !== "")) {
-      return;
-    }
+    // if (Object.values(newErrors).some((error) => error !== "")) {
+    //   return;
+    // }
     const data = {
       name: formData.name,
       email: formData.email,
@@ -104,7 +102,7 @@ const Signup = () => {
   };
 
   return (
-    <>
+    <div className="sign-up-page">
       <Helmet>
         <title>
           {formData.role === "venue"
@@ -116,93 +114,124 @@ const Signup = () => {
           content={`Register as a new  ${formData.role} and get started with our platform.`}
         />
       </Helmet>
-      <PiqueNavbar />
-      <div className="container min-vh-100 ">
-        <div className="row d-flex">
-          <h1 className="fw-bold mt-5 text-center"></h1>
-        </div>
+      {/* <PiqueNavbar /> */}
+      <div className="container min-vh-100">
         <div className="row mt-5">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
+            <div className="image-container">
             <img
-              src="../assets/images/registeruser.avif"
-              className="img-fluid"
-              style={{ height: "80%" }}
-              alt="user"
+            key={formData.role}
+              src={
+                formData.role === "venue"
+                  ? "../assets/pique/image/venueregister.png"
+                  : "../assets/pique/image/entertainerRegister.png"
+              }
+              className="image-fluid"
+              style={{width:"90%", height:"90%"}}
+              alt="signup-banner"
             />
+            </div>
           </div>
           <div className="col-md-6 col-sm-12">
+            <div className="row d-flex justify-content-center">
+              <img
+                src="../assets/pique/image/logo.png"
+                className="w-auto mt-3"
+                style={{ height: "40px" }}
+              />
+            </div>
             <div className="row d-flex justify-content-around">
-              <div className="col-md-10 col-sm-12 my-4">
+              <h3 className="text-center mt-4 fw-semibold">Sign Up</h3>
+              <div className="col-md-10 col-sm-12 p-3 ">
                 <form onSubmit={handleSubmit}>
-                  <div className="btn-group mb-3 w-100 shadow">
-                    <Button
-                      type="button"
-                      className={`btn-outline-primary ${
-                        formData.role === "venue" ? "active" : ""
-                      }`}
-                      label="Sign Up as Venue"
-                      onClick={() => handleRoleSelection("venue")}
-                    />
-
-                    <Button
-                      type="button"
-                      className={`btn-outline-primary ${
-                        formData.role === "entertainer" ? "active" : ""
-                      }`}
-                      label="Sign Up as Entertainer"
-                      onClick={() => handleRoleSelection("entertainer")}
-                    />
-                  </div>
-                  <div className="row">
-                    <label className="text-start fw-bold">Name</label>
-
-                    <Input
-                      type="text"
-                      placeholder="Enter your name"
-                      name="name"
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                    />
-                    {errors.name && (
-                      <p className="text-danger text-start">{errors.name}</p>
-                    )}
+                  <div className="role-container w-100 p-2">
+                    <div className="role-selection-box w-100">
+                      <div
+                        className={`role-indicator ${
+                          formData.role === "venue" ? "left" : "right"
+                        }`}
+                      ></div>
+                      <Button
+                        className={`role-btn ${
+                          formData.role === "venue" ? "active" : ""
+                        }`}
+                        onClick={() => handleRoleSelection("venue")}
+                      >
+                        <p className="fw-light fs-6">Sign Up as Venue</p>
+                      </Button>
+                      <Button
+                        className={`role-btn ${
+                          formData.role === "entertainer" ? "active" : ""
+                        }`}
+                        onClick={() => handleRoleSelection("entertainer")}
+                      >
+                        <p className="fw-light fs-6">Sign Up as Entertainer</p>
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="row">
-                    <label className="text-start fw-bold">Contact Number</label>
-
-                    <Input
-                      type="text"
-                      placeholder="Enter your Contact number"
-                      name="phoneNumber"
-                      value={formData.phoneNumber}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          phoneNumber: e.target.value,
-                        })
-                      }
-                    />
-                    {errors.phoneNumber && (
-                      <p className="text-danger text-start">
-                        {errors.phoneNumber}
-                      </p>
-                    )}
+                  <div className="row mt-4">
+                    <div className="col-md-6">
+                      <label className="text-start fw-semibold">Name*</label>
+                      <Input
+                        type="text"
+                        placeholder="Enter your name"
+                        className="input-line"
+                        name="name"
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                      />
+                      {errors.name && (
+                        <p className="text-danger text-start">{errors.name}</p>
+                      )}
+                    </div>
+                    <div className="col-md-6">
+                      <label className="text-start fw-semibold">
+                        Contact Number*
+                      </label>
+                      <div className="contact-input">
+                        <select className="country-code">
+                          <option value="+1" className="us-option">
+                          US +1
+                          </option>
+                          <option value="+91">IN +91</option>
+                        </select>
+                        <Input
+                          type="text"
+                          placeholder="Enter Number"
+                          className="input-line"
+                          name="phoneNumber"
+                          value={formData.phoneNumber}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              phoneNumber: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      {errors.phoneNumber && (
+                        <p className="text-danger text-start">
+                          {errors.phoneNumber}
+                        </p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="row">
-                    <label className="text-start fw-bold">Email</label>
+                    <label className="text-start fw-semibold">Email*</label>
 
                     <Input
                       type="email"
-                      placeholder="Enter your email address"
+                      placeholder="Enter Email address"
                       name="email"
                       value={formData.email}
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
+                      className="input-line"
                     />
                     {errors.email && (
                       <p className="text-danger text-start">{errors.email}</p>
@@ -210,14 +239,15 @@ const Signup = () => {
                   </div>
 
                   <div className="row">
-                    <label className="text-start fw-bold">
-                      Create Password
+                    <label className="text-start fw-semibold">
+                      Create Password*
                     </label>
 
                     <Input
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      placeholder="Create your password"
+                      className="input-line"
+                      placeholder="Enter Password"
                       value={formData.password}
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
@@ -233,14 +263,15 @@ const Signup = () => {
                   </div>
 
                   <div className="row">
-                    <label className="text-start fw-bold">
-                      Confirm Password
+                    <label className="text-start fw-semibold">
+                      Confirm Password*
                     </label>
 
                     <Input
                       type={showCPassword ? "text" : "password"}
                       name="cpassword"
-                      placeholder="Confirm your password"
+                      className="input-line"
+                      placeholder="Re-enter Password"
                       value={formData.cpassword}
                       onChange={(e) =>
                         setFormData({ ...formData, cpassword: e.target.value })
@@ -254,22 +285,34 @@ const Signup = () => {
                       </p>
                     )}
                   </div>
-
+                  <div className="d-flex justify-content-between">
+                  <div className="row">
+                      <div className="col-1">
+                      <input type="checkbox" id="terms&Services"  className="me-1" />
+                        </div>
+                        <div className="col-11">
+                        <label htmlFor="terms&Services" className="fw-light"><p className="termsServices">By entering your information here, you affirm you have read and agree to our 
+                      <Link to="">Terms of Services</Link>and <Link to="">Privacy Policy</Link></p>
+                      </label>
+                        </div>
+                     
+                    </div>
+</div>
                   <Button
                     type="submit"
-                    className=" btn-primary text-white w-100"
+                    className=" btn-primary text-white w-100 sign-in-btn"
                     label="Signup"
                   />
                 </form>
 
                 <hr />
                 <p className="text-center">
-                  Already have a User Account?{" "}
+                  Already have an account?{" "}
                   <Link
                     to="/login"
-                    className="text-decoration-none text-primary fw-semibold"
+                    className="text-primary fw-semibold"
                   >
-                    Log in
+                    Sign In Now
                   </Link>
                 </p>
               </div>
@@ -277,8 +320,8 @@ const Signup = () => {
           </div>
         </div>
       </div>
-      <PiqueFooter />
-    </>
+      {/* <PiqueFooter /> */}
+    </div>
   );
 };
 

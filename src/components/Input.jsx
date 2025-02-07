@@ -19,7 +19,7 @@ export default function Input({
       />
       {(name === "password" || name === "cpassword") && (
         <span
-          className="input-group-text"
+          className=" eye-icon"
           onClick={togglePasswordVisibility}
           style={{ cursor: "pointer" }}
         >

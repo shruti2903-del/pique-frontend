@@ -59,6 +59,7 @@ export default function AllEntertainer() {
             },
           }
         );
+        console.log(response)
         setEntertainers(response.data.entertainers || []);
         setTotalCount(response.data.totalCount || 0); 
         setError(null);

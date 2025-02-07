@@ -1,6 +1,5 @@
 import React from 'react'
 import EnterDashNavbar from './EnterDashNavbar'
-import EnterDashSidebar from './EnterDashSidebar'
 import { Helmet } from 'react-helmet-async'
 
 export default function DashLayoutEnter({ title, description, children }) {
@@ -10,13 +9,13 @@ export default function DashLayoutEnter({ title, description, children }) {
                 <title>{title}</title>
                 <meta name="description" content={description} />
             </Helmet>
-            <div className="container-xxl position-relative bg-light d-flex p-0">
-                <EnterDashSidebar />
+            {/* <div className="container-xxl position-relative bg-light d-flex p-0">
+                <EnterDashSidebar /> */}
                 <div className="content">
                     <EnterDashNavbar />
                     {children}
                 </div>
-            </div>
+            {/* </div> */}
         </>
   )
 }

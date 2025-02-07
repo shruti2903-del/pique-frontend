@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../Button";
-import "bootstrap/dist/css/bootstrap.min.css";
-// import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 export default function VenueDashNavbar() {
   const navigate = useNavigate();
@@ -11,30 +9,17 @@ export default function VenueDashNavbar() {
     e.preventDefault();
     localStorage.clear();
 
-    // Close modal before navigating
     const closeBtn = document.querySelector(".btn-close[data-bs-dismiss='modal']");
     if (closeBtn) closeBtn.click();
 
     navigate("/login");
   }
 
-  useEffect(() => {
-    document.querySelectorAll('[data-bs-dismiss="offcanvas"]').forEach(button => {
-      button.addEventListener('click', () => {
-        const offcanvas = document.querySelector('.offcanvas.show');
-        if (offcanvas) {
-          const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvas);
-          bsOffcanvas.hide();
-        }
-      });
-    });
-  }, []);
-
   return (
     <>
       <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: "#fff7f5" }}>
         <div className="container-fluid">
-          <a href="index.html" className="navbar-brand">
+          <a href="/p/user/" className="navbar-brand">
             <img src="../assets/pique/image/logo.png" alt="Logo" className="w-50 ms-4" />
           </a>
 

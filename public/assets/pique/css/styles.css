@@ -68,7 +68,7 @@ body {
   height: 45px;
 }
 .mainNavbar .nav-item {
-  padding: 5px 25px;
+  padding: 5px 20px;
 }
 .mainNavbar .navbar-nav .nav-link {
   font-weight: 500;
@@ -287,7 +287,7 @@ body {
   left: 95%;
 }
 .right-box .timeline::before {
-  left: 467px;
+  left: 440px;
 }
 .paraTxt {
   margin-left: 10px;
@@ -1001,3 +1001,148 @@ body {
 .enterMain .img-fluid {
   max-width: 320px;
 }
+
+.input-line {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  padding: 10px 5px;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+}
+
+.input-line:focus {
+  border-bottom: 0.5px solid black;
+  box-shadow: none;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: gray;
+  font-size: 18px;
+  border: none;
+}
+
+.sign-in-btn {
+  background: linear-gradient(to right, #ff512f, #1e3cff);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 25px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.sign-in-btn:hover {
+  background: black;
+  color: white;
+}
+.role-container{
+  border-radius: 8px;
+  border: 1px solid blue;
+  
+}
+.role-selection-box {
+  position: relative;
+  height: 45px;
+  border-radius: 8px ;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.role-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s;
+  padding: 10px;
+}
+
+.role-btn.venue.active {
+  color: red;
+}
+
+.role-btn.entertainer.active {
+  color: blue;
+}
+
+.role-indicator {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: white;
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out, 0.3s;
+}
+
+.role-indicator.left {
+  transform: translateX(0);
+  border: 1px solid red;
+}
+
+.role-indicator.right {
+  transform: translateX(100%);
+  border: 1px solid blue;
+}
+
+.signup-box {
+  width: 320px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  transition: border 0.3s ease-in-out;
+}
+
+.venue-box {
+  border: 2px solid red;
+}
+
+.entertainer-box {
+  border: 2px solid blue;
+}
+
+
+
+
+.contact-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-input {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: none;
+}
+
+.country-code {
+  background: transparent;
+  border: none;
+  padding: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.termsServices{
+font-size: small;
+}
+
+.sign-up-page{
+  background: url(../image/homeBG.jpg);
+}
+
+
+

@@ -4,7 +4,8 @@ const Select = ({ name, options, value, onChange, defaultOption }) => {
     const handleChange = (e) => {
         const selectedValue = e.target.value;
         const selectedName = e.target.options[e.target.selectedIndex].text;
-        onChange({ target: { name: selectedName, value: selectedValue } });  
+        onChange({ target: { name, value: selectedValue } });
+  
     };
   
     return (
@@ -12,7 +13,7 @@ const Select = ({ name, options, value, onChange, defaultOption }) => {
         <select name={name} className="form-select" onChange={handleChange} value={value}>
           <option value="">{defaultOption || "--Choose Option--"}</option>
           {options &&
-            options.map((option, index) => (
+            options.map((option, index) => (  
               <option key={index} value={option.value}>
                 {option.label}
               </option>

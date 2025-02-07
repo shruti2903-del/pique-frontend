@@ -353,7 +353,7 @@ export default function Profile() {
       >
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
           <Toaster position="top-center" reverseOrder={false} />
-          <div className="row">
+          <div className="row mt-5">
             <div className="col-md-12">
               <h2 className="text-secondary text-center">Profile</h2>
             </div>
@@ -487,7 +487,7 @@ export default function Profile() {
                 </div>
               </form>
 
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className="mt-5">
                 <div className="d-flex justify-content-center">
                   <div className="card shadow-lg col-11 border-0 rounded p-4">
                     <div className="card-body">

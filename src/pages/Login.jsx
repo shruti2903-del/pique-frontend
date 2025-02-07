@@ -7,7 +7,7 @@ import Input from "../components/Input";
 import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
 import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
-const Login = ({setIsLoggedIn,setRole}) => {
+const Login = ({ setIsLoggedIn, setRole }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -42,10 +42,9 @@ const Login = ({setIsLoggedIn,setRole}) => {
       localStorage.setItem("status", response.data.status);
       localStorage.setItem("userName", response.data.name);
 
-
       setIsLoggedIn(true);
-      setRole(role); 
-      const status = localStorage.getItem("status");
+      setRole(role);
+      // const status = localStorage.getItem("status");
       // if (response.data.role === "venue" && status === "pending") {
       //   navigate("/statusverification");
       // } else if (response.data.role === "venue" && status === "active") {
@@ -58,11 +57,11 @@ const Login = ({setIsLoggedIn,setRole}) => {
       //   navigate("/error");
       // }
 
-      if(response.data.role === "venue"){
-        navigate("/user/")
-      }else if(response.data.role === "entertainer"){
-        navigate("/user/")
-      }else{
+      if (response.data.role === "venue") {
+        navigate("/user/");
+      } else if (response.data.role === "entertainer") {
+        navigate("/user/");
+      } else {
         navigate("/error");
       }
     } catch (error) {
@@ -72,7 +71,6 @@ const Login = ({setIsLoggedIn,setRole}) => {
       );
     }
   };
-
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -87,42 +85,47 @@ const Login = ({setIsLoggedIn,setRole}) => {
           content="Login to your account to access personalized features and services."
         />
       </Helmet>
-      <PiqueNavbar/>
+      {/* <PiqueNavbar/> */}
       <div className="container min-vh-100 ">
-        <div className="row text-center d-flex justify-content-center">
-          <h1 className="fw-bold mt-3">Login</h1>
-        </div>
-        <div className="row d-flex justify-content-around mt-3">
+        <div className="row d-flex justify-content-around mt-5">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
-            <video
-              src="assets/images/Login.mp4"
+            <img
+              src="./assets/pique/image/login.png"
               className="img-fluid"
-              style={{height:"80%"}}
-              autoPlay
-            loop
-            muted
+              style={{ height: "90%" }}
             />
           </div>
           <div className="col-md-6 col-sm-12">
+            <div className="row mt-5 d-flex justify-content-center">
+              <img
+                src="./assets/pique/image/logo.png"
+                className="w-auto mt-5"
+                style={{ height: "40px" }}
+              />
+            </div>
             <div className="row d-flex justify-content-center">
-              <div className="col-md-10 col-sm-12 p-3 mt-5">
+              <h3 className="text-center mt-5 fw-semibold">Login</h3>
+              <div className="col-md-10 col-sm-12 p-3 ">
                 {errorMessage && (
                   <div className="alert alert-danger" role="alert">
                     {errorMessage}
                   </div>
                 )}
                 <form onSubmit={handleSubmit}>
-                  <div className="row mt-3">
+                  <div className="row ">
+                    <label className="fw-semibold">Email*</label>
                     <Input
                       type="email"
-                      placeholder="Enter your email address"
+                      placeholder="Enter email address"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
+                      className="input-line"
                     />
                   </div>
 
                   <div className="row">
+                    <label className="fw-semibold">Password*</label>
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
@@ -131,34 +134,48 @@ const Login = ({setIsLoggedIn,setRole}) => {
                       onChange={handleChange}
                       showPassword={showPassword}
                       togglePasswordVisibility={togglePasswordVisibility}
+                      className="input-line"
                     />
+                  </div>
+
+                  <div className="d-flex justify-content-between mb-3">
+                    <div>
+                      <input type="checkbox" id="rememberMe" className="me-1" />
+                      <label htmlFor="rememberMe">Remember Me</label>
+                    </div>
+                    <Link href="#" className="text-decoration-none text-dark">
+                      Forgot Password?
+                    </Link>
                   </div>
                   <div className="row">
                     <div className="col d-flex justify-content-center">
                       <Button
                         type="submit"
-                        className="btn-primary w-100 fw-bold"
+                        className="btn-primary w-100 fw-bold sign-in-btn"
                         label="Login"
                       />
                     </div>
                   </div>
                 </form>
-                <hr />
-                <p className="text-center">
-                  New to Pique?{" "}
-                  <Link
-                    to="/signup/venue"
-                    className="text-decoration-none text-primary fw-semibold"
-                  >
-                    Create Account
+                <p className="text-center mt-3">
+                  Don't have an account?
+                  <Link to="/signup/venue" className="text-primary">
+                    Sign Up Now
                   </Link>
+                </p>
+
+                <p
+                  className="text-center"
+                  style={{ fontSize: "12px" }}
+                >
+                  T&C | Privacy Policy
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <PiqueFooter/>
+      {/* <PiqueFooter/> */}
     </>
   );
 };
