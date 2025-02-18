@@ -7,5 +7,8 @@ export default defineConfig({
   base: '/p/',
   server: {
     historyApiFallback: true, // Ensures the SPA routes are handled correctly
+    fs: {
+      allow: ['.'], // Fixes possible issues with serving files
+    },
   },
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function Testimonial() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH
   return (
     <>
         {/* <!-- Testimonial --> */}
@@ -13,7 +14,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="./assets/pique/image/testimonial.png"
+                    src={`${imagePath}testimonial.png`}
                     alt="testimonial"
                     className="testimg"
                   />
@@ -45,7 +46,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="./assets/pique/image/testimonial.png"
+                    src={`${imagePath}testimonial.png`}
                     alt="testimonial"
                     className="testimg"
                   />
@@ -77,7 +78,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="./assets/pique/image/testimonial.png"
+                    src={`${imagePath}testimonial.png`}
                     alt="testimonial"
                     className="testimg"
                   />
@@ -109,7 +110,7 @@ export default function Testimonial() {
               <div className="col-md-6">
                 <div className="testimonial-header">
                   <img
-                    src="./assets/pique/image/testimonial.png"
+                    src={`${imagePath}testimonial.png`}
                     alt="testimonial"
                     className="testimg"
                   />

@@ -8,7 +8,7 @@ export default function Input({
   ...props
 }) {
   return (
-    <div className="input-group mb-2">
+    <div className="input-group">
       <input
         type={showPassword && (name === "password" || name === "cpassword") ? "text" : type}
         placeholder={props.placeholder}

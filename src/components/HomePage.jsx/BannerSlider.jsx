@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function BannerSlider() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   const images = [
     "./assets/pique/image/bannerperson.png",
     "./assets/pique/image/bannerperson1.png",
@@ -26,7 +27,7 @@ export default function BannerSlider() {
             <div className="dashboard-banner position-relative">
               {/* <!-- Background Image --> */}
               <img
-                src="./assets/pique/image/homeBanner.png"
+                src={`${imagePath}homeBanner.png`}
                 alt="dashboardImage"
                 className="img-fluid w-100"
               />
@@ -41,7 +42,7 @@ export default function BannerSlider() {
                       Click Here
                       <span>
                         <img
-                          src="./assets/pique/image/btnanimation.gif"
+                          src={`${imagePath}btnanimation.gif`}
                           alt="btnanimation"
                           className="anmBTN"
                         />
@@ -68,7 +69,7 @@ export default function BannerSlider() {
                     <Link to="#" className="btn myBTN rounded-pill">
                       <span>
                         <img
-                          src="./assets/pique/image/btnanimation.gif"
+                          src={`${imagePath}btnanimation.gif`}
                           alt="btnanimation"
                           className="anmBTN"
                         />

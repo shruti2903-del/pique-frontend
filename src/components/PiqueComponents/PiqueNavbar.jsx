@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function PiqueNavbar() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   return (
     <>
     <div className="container-fluid mainNavbar fixed-top">
@@ -10,7 +11,7 @@ export default function PiqueNavbar() {
           <div className="container">
             {/* <!-- Logo Section --> */}
             <Link className="navbar-brand d-flex align-items-center" to="/">
-              <img src="./assets/pique/image/logo.png" alt="logo" className="logoMain" />
+              <img src={`${imagePath}logo.png`} alt="logo" className="logoMain" />
             </Link>
 
             {/* <!-- Toggle Button for Mobile View --> */}
@@ -59,7 +60,7 @@ export default function PiqueNavbar() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <img src="./assets/pique/image/usa.png" alt="India" width="20" /><span
+                    <img src={`${imagePath}usa.png`} alt="India" width="20" /><span
                       className="ms-1">USA</span>
                   </button>
                   <ul

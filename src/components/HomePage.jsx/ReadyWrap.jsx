@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function ReadyWrap() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH
   return (
     <>
         {/* <!-- Ready to get started? --> */}
@@ -22,7 +23,7 @@ export default function ReadyWrap() {
                     <span className="clicdiv"> Click Here</span>
                     <span className="animdiv">
                       <img
-                        src="./assets/pique/image/btnanimation.gif"
+                        src={`${imagePath}btnanimation.gif`}
                         alt="btnanimation"
                         className="anmBTN"
                       />
@@ -36,7 +37,7 @@ export default function ReadyWrap() {
                   <Link to="#" className="btn myBTN rounded-pill">
                     <span className="animdiv1">
                       <img
-                        src="./assets/pique/image/btnanimation.gif"
+                        src={`${imagePath}btnanimation.gif`}
                         alt="btnanimation"
                         className="anmBTN"
                       />

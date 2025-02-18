@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function ClientWrapper() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   return (
     <>
         {/* <!-- Client  --> */}
@@ -8,22 +9,22 @@ export default function ClientWrapper() {
       <div className="container">
         <div id="logoSlider" className="owl-carousel owl-theme logo-slider">
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 1" />
+            <img src={`${imagePath}company.png`} alt="Company 1" />
           </div>
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 2" />
+            <img src={`${imagePath}company.png`} alt="Company 2" />
           </div>
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 3" />
+            <img src={`${imagePath}company.png`} alt="Company 3" />
           </div>
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 4" />
+            <img src={`${imagePath}company.png`} alt="Company 4" />
           </div>
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 5" />
+            <img src={`${imagePath}company.png`} alt="Company 5" />
           </div>
           <div className="item">
-            <img src="./assets/pique/image/company.png" alt="Company 6" />
+            <img src={`${imagePath}company.png`} alt="Company 6" />
           </div>
         </div>
       </div>

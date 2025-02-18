@@ -1,6 +1,6 @@
 import "./App.css";
 import Login from "./pages/Login";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
@@ -19,10 +19,17 @@ import AddVenue from "./pages/Venue/AddVenue";
 import StatusVerification from "./pages/StatusVerification";
 import AllVenues from "./pages/Venue/AllVenues";
 import ErrorPage from "./pages/ErrorPage";
+import Spinner from "./components/Spinner";
+import EntertainerDetailsForm from "./components/Entertainer/EntertainerDetails";
+import EntertainerDetails from "./pages/Venue/EntertainerDetails";
+import BookingPage from "./pages/Venue/BookingPage";
+import EditVenue from "./pages/Venue/EditVenue";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [role, setRole] = useState(null);
+  const location = useLocation();
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -65,7 +72,11 @@ function App() {
                     <Route path="bookings" element={<AllBookings />} />
                     <Route path="calendar" element={<VenueCalendar />} />
                     <Route path="add" element={<AddVenue />} />
-                    <Route path="allvenues" element={<AllVenues />} />
+                    <Route path="edit" element={<EditVenue />} />
+                    <Route path="venues" element={<AllVenues />} />
+                    <Route path="entertainerDetails" element={<EntertainerDetails/>}/>
+                    <Route path="bookingPage" element={<BookingPage/>}/>
+
                   </Routes>
                 ) : role === "entertainer" ? (
                   <Routes>

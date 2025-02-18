@@ -8,6 +8,9 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "../../components/Spinner";
 import DashLayoutVenue from "../../components/Venue/DashLayoutVenue";
 import PiqueFooter from "../../components/PiqueComponents/PiqueFooter";
+import SearchBar from "../../components/Venue/SearchBar";
+import ProfileSidebar from "../../components/Venue/ProfileSidebar";
+import ProfileCard from "../../components/Venue/ProfileCard";
 
 export default function VenueProfile() {
   // console.log("hello");
@@ -37,7 +40,7 @@ export default function VenueProfile() {
   const [loading, setLoading] = useState(true);
   const [venueId, setVenueId] = useState(null);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
@@ -54,22 +57,32 @@ export default function VenueProfile() {
           }
         );
         console.log(response);
-        const user = response.data;
-        if (user) {
-          setFormData({
-            ...user,
-            country: user.country || "",
-            state: user.state || "",
-            city: user.city || "",
-          });
-          setIsPrefilled(true);
-       
-          if (user.country) {
-            fetchStates(user.country);
-          }
-          if (user.state) {
-            fetchCities(user.state);
-          }
+        const user = response.data.venue || {};
+        setFormData({
+          name: user.name || "",
+          phone: user.phone || "",
+          email: user.email || "",
+          addressLine1: user.addressLine1 || "",
+          addressLine2: user.addressLine2 || "",
+          description: user.description || "",
+          city: user.city || "",
+          state: user.state || "",
+          zipCode: user.zipCode || "",
+          country: user.country || "",
+          lat: user.lat || "",
+          long: user.long || "",
+          amenities: user.amenities || [],
+          websiteUrl: user.websiteUrl || "",
+          // timings: user.timings || "",
+          bookingPolicies: user.bookingPolicies || "",
+        });
+        setIsPrefilled(true);
+
+        if (user.country) {
+          fetchStates(user.country);
+        }
+        if (user.state) {
+          fetchCities(user.state);
         }
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -87,6 +100,7 @@ export default function VenueProfile() {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}location/countries`
         );
+        console.log("countries", response);
         setCountries(
           response.data.countries.map((country) => ({
             label: country.name,
@@ -143,19 +157,24 @@ export default function VenueProfile() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e, value = null) => {
+    const name = e?.target?.name || e; // Handle both cases
+    const newValue = value ?? e?.target?.value;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
 
     if (name === "country") {
-      fetchStates(value);
+      fetchStates(newValue);
     }
     if (name === "state") {
-      fetchCities(value);
+      fetchCities(newValue);
     }
   };
 
+  useEffect(() => {
+    const id = localStorage.getItem("venueId");
+    setVenueId(id);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -164,32 +183,32 @@ export default function VenueProfile() {
     }
 
     setLoading(true);
-
     try {
-      const userData = {};
+      // const userData = {};
       const venueData = {
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        addressLine1: formData.addressLine1,
-        addressLine2: formData.addressLine2,
-        description: formData.description,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        country: formData.country,
-        lat: formData.lat,
-        long: formData.long,
-        amenities: formData.amenities,
-        websiteUrl: formData.websiteUrl,
-        timings: formData.timings,
-        bookingPolicies: formData.bookingPolicies,
+        name: formData.name || "",
+        phone: formData.phone || "",
+        email: formData.email || "",
+        addressLine1: formData.addressLine1 || "",
+        addressLine2: formData.addressLine2 || "",
+        description: formData.description || "",
+        city: formData.city || null,
+        state: formData.state || null,
+        zipCode: formData.zipCode || "",
+        country: formData.country || null,
+        lat: formData.lat || "",
+        long: formData.long || "",
+        amenities: formData.amenities || [],
+        websiteUrl: formData.websiteUrl || "",
+        // timings: formData.timings,
+        bookingPolicies: formData.bookingPolicies || "",
+        venueId: venueId,
       };
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `${import.meta.env.VITE_API_URL}users/update/profile`,
-        { userData, venueData },
+        `${import.meta.env.VITE_API_URL}venues/update`,
+        venueData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -201,7 +220,7 @@ export default function VenueProfile() {
       console.log("Venue updated successfully:", response.data);
       toast.success("Venue updated successfully!");
     } catch (err) {
-      console.error("Error updating form:", err.response || err.message);
+      console.error("Error updating form:", err.response?.data || err.message);
       toast.error("Failed to update the form.");
     } finally {
       setLoading(false);
@@ -216,21 +235,24 @@ export default function VenueProfile() {
       >
         <Toaster position="top-center" reverseOrder={false} />
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-
-        {loading ? (
-          <Spinner />
-        ) : (
-          <div className="row mt-5">
+          <SearchBar />
+          <div className="d-flex">
+            <div className="sidebar-container">
+              <ProfileSidebar />
+            </div>
+            <div className="profile-container">
+              <ProfileCard />
+            </div>
+          </div>
+          {/* <div className="row mt-5">
             <div className="col-md-12">
-            <Button
-          onClick={() => navigate(-1)}
-          className="btn-danger d-flex align-items-center"
-        >
-          <i className="fa fa-arrow-left"></i>
-        </Button>
-              <h2 className="text-secondary text-center">
-                Update Profile
-              </h2>
+              <Button
+                onClick={() => navigate(-1)}
+                className="btn-danger d-flex align-items-center"
+              >
+                <i className="fa fa-arrow-left"></i>
+              </Button>
+              <h2 className="text-secondary text-center">Update Profile</h2>
               {Object.keys(errors).length > 0 && (
                 <div className="alert alert-danger">
                   <strong>Please fill out all required fields:</strong>
@@ -312,10 +334,13 @@ export default function VenueProfile() {
                           <Select
                             name="country"
                             options={countries}
-                            value={formData.country}
-                            onChange={handleChange}
+                            value={formData.country || ""}
+                            onChange={(selectedOption) =>
+                              handleChange("country", selectedOption.value)
+                            }
                             defaultOption="Select Country"
                           />
+
                           {errors.country && (
                             <small className="text-danger">
                               {errors.country}
@@ -329,8 +354,13 @@ export default function VenueProfile() {
                           <Select
                             name="state"
                             options={states}
-                            value={formData.state}
-                            onChange={handleChange}
+                            value={formData.state || ""}
+                            onChange={(selectedOption) =>
+                              handleChange({
+                                name: "state",
+                                value: selectedOption.value,
+                              })
+                            }
                             defaultOption="Select State"
                           />
                           {errors.state && (
@@ -346,8 +376,13 @@ export default function VenueProfile() {
                           <Select
                             name="city"
                             options={cities}
-                            value={formData.city}
-                            onChange={handleChange}
+                            value={formData.city || ""}
+                            onChange={(selectedOption) =>
+                              handleChange({
+                                name: "city",
+                                value: selectedOption.value,
+                              })
+                            }
                             defaultOption="Select City"
                           />
                           {errors.city && (
@@ -482,21 +517,8 @@ export default function VenueProfile() {
                             onChange={handleChange}
                           />
                         </div>
-                        <div className="col-md-4 text-start">
-                          <label htmlFor="timings" className="fw-bold">
-                            Timings
-                          </label>
-                          <Input
-                            type="time"
-                            name="timings"
-                            value={formData.timings}
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div>
 
-                      <div className="row ">
-                        <div className="col-md-12 text-start">
+                        <div className="col-md-4 text-start">
                           <label htmlFor="bookingPolicies" className="fw-bold">
                             Booking Policies
                           </label>
@@ -509,20 +531,21 @@ export default function VenueProfile() {
                         </div>
                       </div>
 
+
+
                       <Button
                         type="submit"
                         className="btn-danger mt-3 w-25 fw-semibold"
-                        label= "Submit" 
+                        label="Submit"
                       />
                     </form>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div> */}
         </div>
-        <PiqueFooter/>
+        <PiqueFooter />
       </DashLayoutVenue>
     </>
   );

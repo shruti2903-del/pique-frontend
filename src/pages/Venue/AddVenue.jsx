@@ -7,6 +7,9 @@ import axios from "axios";
 import DashLayoutVenue from "../../components/Venue/DashLayoutVenue";
 import toast, { Toaster } from "react-hot-toast";
 import PiqueFooter from "../../components/PiqueComponents/PiqueFooter";
+import SearchBar from "../../components/Venue/SearchBar";
+import ProfileSidebar from "../../components/Venue/ProfileSidebar";
+import { Helmet } from "react-helmet-async";
 
 export default function AddVenue() {
   const [formData, setFormData] = useState({
@@ -16,13 +19,13 @@ export default function AddVenue() {
     addressLine1: "",
     addressLine2: "",
     description: "",
-    city: "",
-    state: "",
+    city: 0,
+    state: 0,
     zipCode: "",
-    country: "",
-    lat: "",
-    long: "",
-    amenities: [""],
+    country: 0,
+    lat: 0.0,
+    long: 0.0,
+    amenities: [],
     websiteUrl: "",
     timings: "",
     bookingPolicies: "",
@@ -39,51 +42,69 @@ export default function AddVenue() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}location/countries`
-        );
-        setCountries(
-          response.data.countries.map((country) => ({
-            label: country.name,
-            value: country.id,
-          }))
-        );
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
     fetchCountries();
   }, []);
 
+  const fetchCountries = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}location/countries`);
+      
+      console.log("API Response:", response.data); // Debugging line
+  
+      if (Array.isArray(response.data)) {
+        setCountries(response.data.map((c) => ({ label: c.name, value: c.id })));
+      } else if (response.data && Array.isArray(response.data.countries)) {
+        // If the data is wrapped in an object
+        setCountries(response.data.countries.map((c) => ({ label: c.name, value: c.id })));
+      } else {
+        console.error("Unexpected API response format:", response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
+  
+
   const fetchStates = async (countryId) => {
     try {
-      const Stateresponse = await axios.get(
+      const response = await axios.get(
         `${import.meta.env.VITE_API_URL}location/states?countryId=${countryId}`
       );
-      setStates([
-        ...Stateresponse.data.states.map((state) => ({
-          label: state.name,
-          value: state.id,
-        })),
-      ]);
-      setCities([]);
+      console.log('API Response:', response.data);  // Log the response here
+  
+      if (Array.isArray(response.data.states)) {
+        setStates(
+          response.data.states.map((state) => ({
+            label: state.name,
+            value: state.id,
+          }))
+        );
+      } else {
+        console.error("States data is not an array", response.data);
+      }
     } catch (error) {
       console.error("Error fetching states:", error);
     }
   };
+  
+
   const fetchCities = async (stateId) => {
     try {
-      const Cityresponse = await axios.get(
+      const response = await axios.get(
         `${import.meta.env.VITE_API_URL}location/cities?stateId=${stateId}`
       );
-      setCities([
-        ...Cityresponse.data.cities.map((city) => ({
-          label: city.name,
-          value: city.id,
-        })),
-      ]);
+      console.log('API Response:', response.data);  // Log the response here
+  
+      if (Array.isArray(response.data.cities)) {
+        setCities(
+          response.data.cities.map((city) => ({
+            label: city.name,
+            value: city.id,
+          }))
+        );
+      } else {
+        console.error("Cities data is not an array", response.data);
+      }
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
@@ -118,8 +139,6 @@ export default function AddVenue() {
     }
   };
 
-
-
   const handleDeleteImage = (index) => {
     setImages((prev) => {
       const updatedImages = prev.filter((_, i) => i !== index);
@@ -145,7 +164,9 @@ export default function AddVenue() {
     const files = Array.from(e.target.files);
     console.log("Selected files:", files);
 
-    if (type === "images") {
+    if (type === "headshot" && files.length > 0) {
+      setHeadshot(files[0]); // Store the first selected file as the headshot
+    } else if (type === "images") {
       setImages((prev) => [...prev, ...files]);
     } else if (type === "videos") {
       setVideos((prev) => [...prev, ...files]);
@@ -160,6 +181,31 @@ export default function AddVenue() {
     }
 
     const token = localStorage.getItem("token");
+
+    const venueData = {
+      ...formData,
+      city: Number(formData.city),
+      state: Number(formData.state),
+      country: Number(formData.country),
+      lat: parseFloat(formData.lat),
+      long: parseFloat(formData.long),
+      amenities: Array.isArray(formData.amenities)
+        ? formData.amenities
+        : formData.amenities.split(",").map((item) => item.trim()),
+    };
+
+    if (
+      venueData.lat < -90 ||
+      venueData.lat > 90 ||
+      venueData.long < -180 ||
+      venueData.long > 180
+    ) {
+      toast.error(
+        "Latitude must be between -90 and 90, Longitude must be between -180 and 180."
+      );
+      return;
+    }
+    console.log(venueData);
 
     try {
       const response = await axios.post(
@@ -236,7 +282,288 @@ export default function AddVenue() {
       <DashLayoutVenue title="Add Venue" description="Add a new venue ">
         <Toaster position="top-center" reverseOrder={false} />
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-          <div className="row mt-4">
+          <SearchBar />
+          <div className="d-flex">
+            <div className="sidebar-container">
+              <ProfileSidebar />
+            </div>
+            <div className="profile-container">
+              <p className="profile-font fw-bold">ADD VENUE</p>
+              <hr />
+              <p
+                className="profile-font text-secondary"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(-1)}
+              >
+                <i class="fa-solid fa-angle-left me-2"></i>Back to your venues
+              </p>
+              <form onSubmit={handleSubmit}>
+                <div className="row mb-2">
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">Venue Name*</label>
+                    <Input
+                      type="text"
+                      name="name"
+                      placeholder="Enter Venue Name"
+                      className="form-control profile-font"
+                      value={formData.name}
+                      onChange={handleChange}
+                    />
+                    {errors.name && (
+                      <small className="text-danger">{errors.name}</small>
+                    )}
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">Email*</label>
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email address"
+                      className="form-control profile-font"
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
+                    {errors.email && (
+                      <small className="text-danger">{errors.email}</small>
+                    )}
+                  </div>
+                </div>
+
+                {/* <div className="row mb-2">
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">
+                      Phone Number*
+                    </label>
+                    <Input
+                      type="text"
+                      name="phone"
+                      placeholder="Enter your phone number"
+                      className="form-control profile-font"
+                      value={formData.phone}
+                      onChange={handleChange}
+                    />
+                    {errors.phone && (
+                      <small className="text-danger">{errors.phone}</small>
+                    )}
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">
+                      Upload Images*
+                    </label>
+                    <Input
+                      type="file"
+                      name="headshot"
+                      accept="image/*"
+                      onChange={(e) => handleFileChange(e, "headshot")}
+                      className="form-control profile-font"
+                    />
+                    {headshot && (
+                      <div className="position-relative">
+                        <img
+                          src={URL.createObjectURL(headshot)}
+                          alt="Headshot preview"
+                          className="media-image rounded"
+                          style={{ height: "90px", width: "90px" }}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-link position-absolute"
+                          onClick={handleDeleteHeadshot}
+                        >
+                          <i className="fa-solid fa-trash-can text-danger"></i>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div> */}
+
+<div className="row mb-2">
+  <div className="col-md-6 col-sm-12">
+    <label className="profile-font fw-bold">Phone Number*</label>
+    <Input
+      type="text"
+      name="phone"
+      placeholder="Enter your phone number"
+      className="form-control profile-font"
+      value={formData.phone}
+      onChange={handleChange}
+    />
+    {errors.phone && <small className="text-danger">{errors.phone}</small>}
+  </div>
+
+  <div className="col-md-6 col-sm-12">
+    <label className="profile-font fw-bold">Upload Images*</label>
+    
+    <div className="custom-file-upload">
+      <Input
+        type="file"
+        name="headshot"
+        accept="image/*"
+        id="fileInput"
+        className="d-none"
+        onChange={(e) => handleFileChange(e, "headshot")}
+      />
+
+      <label htmlFor="fileInput" className="form-control profile-font text-center d-flex align-items-center">
+        {headshot ? (
+          <>
+            <img
+              src={URL.createObjectURL(headshot)}
+              alt="Headshot preview"
+              className="media-image rounded"
+              style={{ height: "40px", width: "40px", objectFit: "cover", marginRight: "10px" }}
+            />
+            <span>Change Image</span>
+          </>
+        ) : (
+          // "Drag & Drop or Choose image to upload"
+          <p className="profile-font text-secondary">Drag & Drop or <span className="text-primary">Choose image</span>  to upload</p>
+        )}
+      </label>
+    </div>
+
+    {headshot && (
+      <button
+        type="button"
+        className="btn btn-link text-danger mt-2 profile-font"
+        onClick={handleDeleteHeadshot}
+      >
+        <i className="fa-solid fa-trash-can"></i> Remove
+      </button>
+    )}
+  </div>
+</div>
+
+
+                <div className="row mb-2">
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">
+                      Address Line 1
+                    </label>
+                    <p className="profile-font text-secondary mb-0">
+                      Street Address, P.O.box,c/o
+                    </p>
+                    <Input
+                      type="text"
+                      name="addressLine1"
+                      placeholder="Address Line 1"
+                      value={formData.addressLine1}
+                      className="form-control profile-font"
+                      onChange={handleChange}
+                    />
+                    {errors.addressLine1 && (
+                      <small className="text-danger">
+                        {errors.addressLine1}
+                      </small>
+                    )}
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <label className="profile-font fw-bold">
+                      Address Line 2
+                    </label>
+                    <p className="profile-font text-secondary mb-0">
+                      {" "}
+                      Apartment,suite,unit,building,floor,etc.
+                    </p>
+                    <Input
+                      type="text"
+                      name="addressLine2"
+                      placeholder="Address Line 2"
+                      value={formData.addressLine2}
+                      className="form-control profile-font"
+                      onChange={handleChange}
+                    />
+                    {errors.addressLine2 && (
+                      <small className="text-danger">
+                        {errors.addressLine2}
+                      </small>
+                    )}
+                  </div>
+                </div>
+
+                <div className="row mb-2 profile-font">
+                  <div className="col-md-6 col-sm-12">
+                    <label className="fw-bold">Country</label>
+                    <Select
+                      name="country"
+                      options={countries}
+                      value={formData.country || ""}
+                      onChange={(e) => handleChange("country", e.target.value)}
+                      defaultOption="--Select Country--"
+                      className="form-control profile-font"
+                    />
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <label className="fw-bold">State</label>
+                    <Select
+                      name="state"
+                      options={states}
+                      value={formData.state || ""}
+                      onChange={(e) => handleChange("state", e.target.value)}
+                      defaultOption="--Select State--"
+                      className="form-control profile-font"
+                    />
+                  </div>
+                </div>
+
+                <div className="row mb-2 profile-font">
+                  <div className="col-md-6 col-sm-12">
+                    <label className="fw-bold">City</label>
+                    <Select
+                      name="city"
+                      options={cities}
+                      value={formData.city}
+                      onChange={(e) => handleChange("city", e.target.value)}
+                      defaultOption="--Select City--"
+                      className="form-control profile-font"
+                    />
+                    {errors.city && (
+                      <small className="text-danger">{errors.city}</small>
+                    )}
+                  </div>
+                  <div className="col-md-6 col-sm-12">
+                    <label className="fw-bold">ZIP/Postal Code</label>
+                    <Input
+                      type="text"
+                      name="zipCode"
+                      placeholder="Enter your zip code"
+                      value={formData.zipCode}
+                      onChange={handleChange}
+                      className="form-control profile-font"
+                    />
+                    {errors.zipCode && (
+                      <small className="text-danger">{errors.zipCode}</small>
+                    )}
+                  </div>
+                </div>
+                <div className="row mb-2">
+                  <div className="col-md-12">
+                    <label className="profile-font fw-bold">Description</label>
+                    <Input
+                      type="text"
+                      name="description"
+                      placeholder="Enter description"
+                      className="form-control profile-font"
+                      value={formData.description}
+                      onChange={handleChange}
+                    />
+                    {errors.description && (
+                      <small className="text-danger">
+                        {errors.description}
+                      </small>
+                    )}
+                  </div>
+                </div>
+
+                <Button
+                  className="venue-btn mb-0 profile-font"
+                  label="Submit"
+                />
+              </form>
+            </div>
+          </div>
+
+          {/* <div className="row mt-5">
             <div className="col-md-12">
               <Button
                 onClick={() => navigate(-1)}
@@ -255,7 +582,7 @@ export default function AddVenue() {
                   </ul>
                 </div>
               )}
-              <div className="justify-content-center">
+              <div className="d-flex justify-content-center">
                 <div className="card col-md-11 shadow-lg p-5">
                   <div className="card-body text-center">
                     <form onSubmit={handleSubmit}>
@@ -538,8 +865,8 @@ export default function AddVenue() {
                         <h4 className="text-start text-danger">Media Upload</h4>
                         <hr className="mb-4" />
 
-                        {/* Headshot Upload */}
-                        {/* <div className="row mb-3">
+                        Headshot Upload
+                        <div className="row mb-3">
                       <div className="col-md-12 col-sm-12">
                         <label className="fw-bold">Headshot Profile Pic</label>
                         <Input
@@ -566,9 +893,9 @@ export default function AddVenue() {
                           </div>
                         )}
                       </div>
-                    </div> */}
+                    </div>
 
-                        {/* Image Upload */}
+                        Image Upload
                         <div className="row mt-4">
                           <div className="col-md-12 col-sm-12">
                             <label className="fw-bold">Image Upload</label>
@@ -606,7 +933,7 @@ export default function AddVenue() {
                           </div>
                         </div>
 
-                        {/* Video Upload */}
+                        Video Upload
                         <div className="row mt-4">
                           <div className="col-md-12 col-sm-12">
                             <label className="fw-bold">Video Upload</label>
@@ -644,7 +971,7 @@ export default function AddVenue() {
                           </div>
                         </div>
 
-                        {/* Submit Button */}
+                        Submit Button
                         <div className="row mt-4">
                           <div className="col d-flex justify-content-center">
                             <Button
@@ -661,7 +988,7 @@ export default function AddVenue() {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
           <PiqueFooter />
         </div>
       </DashLayoutVenue>

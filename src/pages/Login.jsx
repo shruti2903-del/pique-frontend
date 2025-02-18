@@ -34,13 +34,13 @@ const Login = ({ setIsLoggedIn, setRole }) => {
       );
       console.log("Login successful", response.data);
       const token = response.data.access_token;
-      const role = response.data.role;
-      const userId = response.data.userId;
+      const role = response.data.data.user.role;
+      const userId = response.data.data.user.id;
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", userId);
-      localStorage.setItem("status", response.data.status);
-      localStorage.setItem("userName", response.data.name);
+      localStorage.setItem("status", response.data.data.user.status);
+      localStorage.setItem("userName", response.data.data.user.name);
 
       setIsLoggedIn(true);
       setRole(role);
@@ -57,9 +57,9 @@ const Login = ({ setIsLoggedIn, setRole }) => {
       //   navigate("/error");
       // }
 
-      if (response.data.role === "venue") {
+      if (role === "venue") {
         navigate("/user/");
-      } else if (response.data.role === "entertainer") {
+      } else if (role === "entertainer") {
         navigate("/user/");
       } else {
         navigate("/error");

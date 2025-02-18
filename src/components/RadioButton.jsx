@@ -10,21 +10,21 @@ const RadioButton = ({ name, options, value, onChange, label }) => {
           </label>
         </div> */}
 
-        <div className="col-md-12 d-flex">
+        <div className="col-md-12">
           {options.map((option, index) => (
-            <div key={index} className="form-check form-check-inline w-50">
+            <div key={index} className="form-check form-check-inline mb-1">
               <input
                 type="radio"
                 id={`${name}-${option.value}`}
                 name={name}
                 value={option.value}
                 checked={value === option.value}
-                onChange={onChange}
-                className="form-check-input"
+                onChange={(e) => onChange(e.target.value)}
+                className="form-check-input custom-radio"
               />
               <label
                 htmlFor={`${name}-${option.value}`}
-                className="form-check-label"
+                className="form-check-label ms-2"
               >
                 {option.label}
               </label>

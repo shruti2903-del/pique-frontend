@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
 import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
@@ -11,8 +11,21 @@ import ServiceWrapper from "../components/HomePage.jsx/ServiceWrapper";
 import RatedReviewed from "../components/HomePage.jsx/RatedReviewed";
 import Testimonial from "../components/HomePage.jsx/Testimonial";
 import ReadyWrap from "../components/HomePage.jsx/ReadyWrap";
+import VenueDashNavbar from "../components/Venue/VenueDashNavbar";
+import EnterDashNavbar from "../components/Entertainer/EnterDashNavbar";
 
 export default function Home() {
+  const [userType, setUserType] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("role");
+
+    if (storedUser) {
+      setUserType(storedUser);
+    } else {
+      setUserType(null);
+    }
+  }, []);
   return (
     <>
       <Helmet>

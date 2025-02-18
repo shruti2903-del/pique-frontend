@@ -1,6 +1,7 @@
 import React from 'react'
 
 export default function RatedReviewed() {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH
   return (
     <>
         {/* <!-- Rated & Reviewed! --> */}
@@ -25,12 +26,12 @@ export default function RatedReviewed() {
           <div className="col-md-6">
             <div className="ratedIMG position-relative">
               <img
-                src="./assets/pique/image/animationstar.gif"
+                src={`${imagePath}animationstar.gif`}
                 alt="animationstar"
                 className="img-fluid anmitIMG"
                 style={{width:"250px"}}
               />
-              <img src="./assets/pique/image/rated.gif" alt="rated" className="img-fluid" />
+              <img src={`${imagePath}rated.gif`} alt="rated" className="img-fluid" />
             </div>
           </div>
         </div>

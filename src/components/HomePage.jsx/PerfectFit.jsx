@@ -1,11 +1,13 @@
+import { height } from "@fortawesome/free-solid-svg-icons/fa0";
 import React from "react";
 
 const PerfectFit = () => {
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   return (
     <div className="perfectWrap">
       <lottie-player
         className="dotslottie"
-        src="./assets/pique/image/Animation-1738578543085.json"
+        src={`${imagePath}Animation-1738578543085.json`}
         background="transparent"
         speed="1"
         style={{
@@ -13,6 +15,7 @@ const PerfectFit = () => {
           position: "absolute",
           zIndex: "-1",
           top: "-30%",
+          height: "160%",
         }}
         loop
         autoplay
@@ -25,7 +28,7 @@ const PerfectFit = () => {
                 We are
                 <span>
                   <lottie-player
-                    src="./assets/pique/image/148006.json"
+                  src={`${imagePath}148006.json`}
                     background="transparent"
                     speed="1"
                     style={{

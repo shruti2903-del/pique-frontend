@@ -7,6 +7,8 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import DashLayoutEnter from "../../components/Entertainer/DashLayoutEnter";
 import PiqueFooter from "../../components/PiqueComponents/PiqueFooter";
+import MediaUpload from "../../components/Entertainer/MediaUpload";
+import EntertainerDetailsForm from "../../components/Entertainer/EntertainerDetails";
 
 export default function Profile() {
   const token = localStorage.getItem("token");
@@ -15,19 +17,19 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     name: "",
     category: null,
-    specific_category: "",
+    specific_category: null,
     bio: "",
     phone1: "",
     phone2: "",
     performanceRole: "",
     availability: "",
-    pricePerEvent: "",
+    pricePerEvent: null,
     socialLinks: "",
     vaccinated: "",
     status: "active",
     userId: userId,
-    images: [],
-    videos: [],
+    image: [],
+    video: [],
     headshot: null,
   });
   const [categories, setCategories] = useState([]);
@@ -35,9 +37,11 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [errors, setErrors] = useState({});
   const [headshot, setHeadshot] = useState(null);
-  const [images, setImages] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [image, setImage] = useState([]);
+  const [video, setVideo] = useState([]);
   const [tempLink, setTempLink] = useState("");
+  const [media, setMedia] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   const performanceRole = [
     { value: "soloist", label: "Soloist" },
@@ -63,7 +67,11 @@ export default function Profile() {
         );
         console.log("Categories:", response.data);
 
-        if (response.data && Array.isArray(response.data.categories)) {
+        if (
+          response.data &&
+          response.data.categories &&
+          Array.isArray(response.data.categories)
+        ) {
           setCategories(
             response.data.categories.map((cat) => ({
               value: cat.id,
@@ -88,15 +96,58 @@ export default function Profile() {
           `${import.meta.env.VITE_API_URL}entertainers`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log(response.data[0].id)
-        localStorage.setItem('entertainerId', response.data[0].id)
-        if (response.data?.length > 0) {
-          setFormData(response.data[0]);
+
+        const entertainer = response.data?.entertainers?.[0];
+
+        if (entertainer) {
+          console.log("Fetched Entertainer:", entertainer);
+          localStorage.setItem("entertainerId", entertainer.id);
+
+          setFormData({
+            ...entertainer,
+            category: Number(entertainer.category) || "",
+            specific_category: Number(entertainer.specific_category) || "",
+          });
+
           setIsEditing(true);
+
+          // Fetch subcategories if a category exists
+          if (entertainer.category) {
+            fetchSubcategories(entertainer.category);
+          }
         }
       } catch (error) {
-        console.error("Error fetching entertainer data:", error);
+        console.error("Error fetching entertainer:", error);
         toast.error("Failed to fetch entertainer data.");
+      }
+    };
+
+    const fetchSubcategories = async (categoryId) => {
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }entertainers/categories/subcategories?id=${categoryId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (
+          response.data?.categories &&
+          Array.isArray(response.data.categories)
+        ) {
+          setSubcategories(
+            response.data.categories.map((sub) => ({
+              value: sub.id,
+              label: sub.name,
+            }))
+          );
+        } else {
+          setSubcategories([]);
+          toast.error("No subcategories found.");
+        }
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+        toast.error("Failed to fetch subcategories.");
       }
     };
 
@@ -107,11 +158,65 @@ export default function Profile() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setTempLink(e.target.value);
+    setTempLink(value);
   };
 
+  //   const handleCategoryChange = async (selectedValue) => {
+  //     console.log("handleCategoryChange triggered"); // Check if function is being called
+  //     console.log("Selected Category ID:", selectedValue);
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     category: selectedValue,
+  //     specific_category: "",
+  //   }));
+
+  //   try {
+  //     const response = await axios.get(
+  //       `${import.meta.env.VITE_API_URL}entertainers/categories/subcategories?id=${selectedValue}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+
+  //     console.log("Categories from API:", response.data.categories);
+
+  //     if (response.data && Array.isArray(response.data.categories)) {
+  //       const filteredSubcategories = response.data.categories.filter(
+  //         (sub) => sub.parentId === Number(selectedValue)
+  //       );
+
+  //       console.log("Filtered Subcategories:", filteredSubcategories);
+
+  //       setSubcategories(
+  //         filteredSubcategories.map((sub) => ({
+  //           value: sub.id,
+  //           label: sub.name,
+  //         }))
+  //       );
+  //     // if (response.data && response.data.categories && Array.isArray(response.data.categories)) {
+  //     //   setSubcategories(
+  //     //     response.data.categories.map((sub) => ({
+  //     //       value: sub.id,
+  //     //       label: sub.name,
+  //     //     }))
+  //     //   );
+  //     } else {
+  //       console.error("No subcategory found:", response.data);
+  //       setSubcategories([]);
+  //       toast.error("No subcategories found for the selected category");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching subcategories:", error);
+  //     setSubcategories([]);
+  //     toast.error("Failed to fetch subcategories.");
+  //   }
+  // };
+
   const handleCategoryChange = async (selectedValue) => {
-    console.log("Selected Value", selectedValue);
+    console.log("handleCategoryChange triggered:", selectedValue);
 
     setFormData((prev) => ({
       ...prev,
@@ -121,41 +226,31 @@ export default function Profile() {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}entertainers/categories/subcategories?id=${selectedValue}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${
+          import.meta.env.VITE_API_URL
+        }entertainers/categories/subcategories?id=${selectedValue}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log("Categories from API:", response.data.categories);
-
-      if (response.data && Array.isArray(response.data.categories)) {
-        const filteredSubcategories = response.data.categories.filter(
-          (sub) => sub.parentId === selectedValue
-        );
-
-        console.log("Filtered Subcategories:", filteredSubcategories);
-
+      if (
+        response.data?.categories &&
+        Array.isArray(response.data.categories)
+      ) {
         setSubcategories(
-          filteredSubcategories.map((sub) => ({
+          response.data.categories.map((sub) => ({
             value: sub.id,
             label: sub.name,
           }))
         );
       } else {
-        console.error("No subcategory found:", response.data);
         setSubcategories([]);
-        toast.error("No subcategories found for the selected category");
+        toast.error("No subcategories found.");
       }
     } catch (error) {
       console.error("Error fetching subcategories:", error);
-      setSubcategories([]);
       toast.error("Failed to fetch subcategories.");
     }
   };
-
 
   const handleSubCategoryChange = (selectedValue) => {
     setFormData((prev) => ({
@@ -165,17 +260,17 @@ export default function Profile() {
   };
 
   const handleDeleteImage = (index) => {
-    setImages((prev) => {
+    setImage((prev) => {
       const updatedImages = prev.filter((_, i) => i !== index);
-      setFormData((prevData) => ({ ...prevData, images: updatedImages }));
+      setFormData((prevData) => ({ ...prevData, image: updatedImages }));
       return updatedImages;
     });
   };
 
   const handleDeleteVideo = (index) => {
-    setVideos((prev) => {
+    setVideo((prev) => {
       const updatedVideos = prev.filter((_, i) => i !== index);
-      setFormData((prevData) => ({ ...prevData, videos: updatedVideos }));
+      setFormData((prevData) => ({ ...prevData, video: updatedVideos }));
       return updatedVideos;
     });
   };
@@ -185,20 +280,64 @@ export default function Profile() {
     setFormData((prevData) => ({ ...prevData, headshot: "" }));
   };
 
+  const fetchMedia = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("No token found in localStorage.");
+        return;
+      }
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}media/uploads`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200 && response.data?.media) {
+        console.log("Fetched Media Successfully:", response.data.media);
+        setMedia(response.data.media);
+
+        if (onMediaUpdate) {
+          onMediaUpdate(response.data.media);
+        }
+      } else {
+        console.warn("Unexpected API response structure:", response.data);
+        setMedia([]);
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching media:",
+        error.response?.data || error.message
+      );
+      setMedia([]);
+    }
+  };
+
+  const onMediaUpdate = (updatedMedia) => {
+    setMedia(updatedMedia);
+  };
+
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+
   const handleFileChange = (e, type) => {
     const files = Array.from(e.target.files);
 
     if (type === "headshot") {
-      const file = files[0];
+      const file = e.target.files[0];
       const fileUrl = URL.createObjectURL(file);
       setHeadshot(file);
       setFormData((prev) => ({ ...prev, headshot: fileUrl }));
     }
 
-    if (type === "images") {
-      setImages((prev) => [...prev, ...files]);
-    } else if (type === "videos") {
-      setVideos((prev) => [...prev, ...files]);
+    if (type === "image") {
+      setImage((prev) => [...prev, ...files]);
+    } else if (type === "video") {
+      setVideo((prev) => [...prev, ...files]);
     }
   };
 
@@ -224,89 +363,265 @@ export default function Profile() {
     return newErrors;
   };
 
+  // const mediaUpload = async (e) => {
+  //   e.preventDefault();
+  //   const token = localStorage.getItem("token");
+  
+  //   try {
+  //     if (!headshot && image.length === 0 && video.length === 0) {
+  //       toast.error("Please select media to upload.");
+  //       return;
+  //     }
+  
+  //     setUploading(true); 
+  
+  //     let updatedHeadshotUrl = null; 
+  
+  //     if (media.length > 0) {
+  //       await Promise.all(
+  //         media.map(async (item) => {
+  //           if (
+  //             (item.type === "headshot" && !headshot) ||
+  //             (item.type === "image" && image.length === 0) ||
+  //             (item.type === "video" && video.length === 0)
+  //           ) {
+  //             return; 
+  //           }
+  
+  //           const updateFormData = new FormData();
+  //           if (item.type === "headshot" && headshot) {
+  //             updateFormData.append("headshot", headshot);
+  //           } else if (item.type === "image" && image.length > 0) {
+  //             image.forEach((img) => updateFormData.append("image", img)); 
+  //           } else if (item.type === "video" && video.length > 0) {
+  //             video.forEach((vid) => updateFormData.append("video", vid));
+  //           }
+  
+  //           try {
+  //             const updateResponse = await axios.put(
+  //               `${import.meta.env.VITE_API_URL}media/${item.id}`,
+  //               updateFormData,
+  //               {
+  //                 headers: {
+  //                   Authorization: `Bearer ${token}`,
+  //                 },
+  //               }
+  //             );
+  
+  //             if (item.type === "headshot") {
+  //               updatedHeadshotUrl = updateResponse.data.headshotUrl;
+  //             }
+  //           } catch (err) {
+  //             console.error(`Failed to update ${item.type}:`, err.response?.data || err);
+  //             toast.error(`Failed to update ${item.type}.`);
+  //           }
+  //         })
+  //       );
+  
+  //       toast.success("Media updated successfully!");
+  //     }
+  
+  //     if (headshot || image.length > 0 || video.length > 0) {
+  //       const mediaFormData = new FormData();
+  //       if (headshot) mediaFormData.append("headshot", headshot);
+  //       image.forEach((img) => mediaFormData.append("image", img));
+  //       video.forEach((vid) => mediaFormData.append("video", vid));
+  
+  //       try {
+  //         const mediaUploadResponse = await axios.post(
+  //           `${import.meta.env.VITE_API_URL}media/uploads`,
+  //           mediaFormData,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  
+  //         if (mediaUploadResponse.status === 201) {
+  //           const { headshotUrl, imagesUrls, videosUrls } = mediaUploadResponse.data;
+  //           updatedHeadshotUrl = headshotUrl;
+  
+  //           setFormData((prev) => ({
+  //             ...prev,
+  //             headshot: headshotUrl || prev.headshot,
+  //             image: imagesUrls || prev.image,
+  //             video: videosUrls || prev.video,
+  //           }));
+  
+  //           toast.success("Media uploaded successfully!");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error uploading new media:", error.response?.data || error);
+  //         toast.error(error.response?.data?.message || "Failed to upload media.");
+  //       }
+  //     }
+  
+  //     await fetchMedia(); 
+  
+  //     if (updatedHeadshotUrl) {
+  //       setFormData((prev) => ({
+  //         ...prev,
+  //         headshot: updatedHeadshotUrl,
+  //       }));
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in mediaUpload:", error.response?.data || error);
+  //     toast.error(error.response?.data?.message || "Failed to process media.");
+  //   } finally {
+  //     setUploading(false); 
+  //   }
+  // };
+  
   const mediaUpload = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+  
     try {
-      const mediaFormData = new FormData();
-
-      if (headshot) {
-        mediaFormData.append("headshot", headshot);
+      if (!headshot && image.length === 0 && video.length === 0) {
+        toast.error("Please select media to upload.");
+        return;
       }
-
-      images.forEach((image) => {
-        mediaFormData.append("images", image);
-      });
-
-      videos.forEach((video) => {
-        mediaFormData.append("videos", video);
-      });
-
-      const mediaUploadResponse = await axios.post(
-        `${import.meta.env.VITE_API_URL}media/uploads`,
-        mediaFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
+  
+      setUploading(true);
+  
+      let updatedHeadshotUrl = null;
+      let newImages = [];
+      let newVideos = [];
+  
+      if (media.length > 0) {
+        // ✅ Update existing media
+        const updatePromises = media.map(async (item) => {
+          if (
+            (item.type === "headshot" && !headshot) ||
+            (item.type === "image" && image.length === 0) ||
+            (item.type === "video" && video.length === 0)
+          ) {
+            return null;
+          }
+  
+          const updateFormData = new FormData();
+          if (item.type === "headshot" && headshot) {
+            updateFormData.append("headshot", headshot);
+          } else if (item.type === "image" && image.length > 0) {
+            image.forEach((img) => updateFormData.append("images", img));
+          } else if (item.type === "video" && video.length > 0) {
+            video.forEach((vid) => updateFormData.append("videos", vid));
+          }
+  
+          try {
+            const response = await axios.put(
+              `${import.meta.env.VITE_API_URL}media/${item.id}`,
+              updateFormData,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "multipart/form-data",
+                },
+              }
+            );
+            if (item.type === "headshot") {
+              updatedHeadshotUrl = response.data.headshotUrl;
+            }
+          } catch (err) {
+            console.error(`Failed to update ${item.type}:`, err.response?.data || err);
+            toast.error(`Failed to update ${item.type}.`);
+          }
+        });
+  
+        await Promise.all(updatePromises);
+        toast.success("Media updated successfully!");
+      } else {
+        // ✅ Post new media (only if media is empty)
+        const uploadFormData = new FormData();
+        if (headshot) uploadFormData.append("headshot", headshot);
+        image.forEach((img) => uploadFormData.append("images", img));
+        video.forEach((vid) => uploadFormData.append("videos", vid));
+  
+        try {
+          const uploadResponse = await axios.post(
+            `${import.meta.env.VITE_API_URL}media/uploads`,
+            uploadFormData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+  
+          if (uploadResponse.status === 201) {
+            const { headshotUrl, imagesUrls, videosUrls } = uploadResponse.data;
+            updatedHeadshotUrl = headshotUrl;
+            newImages = imagesUrls;
+            newVideos = videosUrls;
+            toast.success("Media uploaded successfully!");
+          }
+        } catch (error) {
+          console.error("Error uploading new media:", error.response?.data || error);
+          toast.error(error.response?.data?.message || "Failed to upload media.");
         }
-      );
-
-      console.log("Media upload response:", mediaUploadResponse);
-      if (mediaUploadResponse.status === 201) {
-        const { headshotUrl, imagesUrls, videosUrls } =
-          mediaUploadResponse.data;
-
-        setFormData((prev) => ({
-          ...prev,
-          headshot: headshotUrl || prev.headshot,
-          images: imagesUrls || prev.images,
-          videos: videosUrls || prev.videos,
-        }));
-
-        toast.success("Media uploaded successfully!");
       }
+  
+      // ✅ Update UI with new media
+      setFormData((prev) => ({
+        ...prev,
+        headshot: updatedHeadshotUrl || prev.headshot,
+        image: newImages.length > 0 ? newImages : prev.image,
+        video: newVideos.length > 0 ? newVideos : prev.video,
+      }));
+  
+      await fetchMedia(); // Refresh media list once
     } catch (error) {
-      console.error("Error uploading media:", error);
-      toast.error("Failed to upload media. Please try again.");
+      console.error("Error in mediaUpload:", error.response?.data || error);
+      toast.error(error.response?.data?.message || "Failed to process media.");
+    } finally {
+      setUploading(false);
     }
   };
+  
+  
+  
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-  
+    console.log("data", formData);
+
+    // const validationErrors = validateForm();
+    // if (Object.keys(validationErrors).length > 0) {
+    //   setErrors(validationErrors);
+    //   return;
+    // }
+
     const userData = {};
     const entertainerData = {
       name: formData.name,
-      category: formData.category,
-      specific_category: formData.specific_category,
+      category: Number(formData.category) || null,
+      specific_category: Number(formData.specific_category) || null,
       bio: formData.bio,
       phone1: formData.phone1,
       phone2: formData.phone2,
       performanceRole: formData.performanceRole,
       availability: formData.availability,
       vaccinated: formData.vaccinated,
-      pricePerEvent: formData.pricePerEvent,
+      pricePerEvent: Number(formData.pricePerEvent) || null,
       socialLinks: formData.socialLinks,
       status: localStorage.getItem("status"),
     };
-  
+
     const entertainerId = localStorage.getItem("entertainerId");
-    if (!entertainerId) {
+    console.log(entertainerId);
+    if (isEditing && !entertainerId) {
       toast.error("Entertainer ID is missing.");
       return;
     }
-  
+
     try {
       if (isEditing) {
         console.log("Updating entertainer with ID:", entertainerId);
-        const updateResponse = await axios.put(
+        const updateResponse = await axios.patch(
           `${import.meta.env.VITE_API_URL}entertainers/${entertainerId}`,
           entertainerData,
           {
@@ -316,7 +631,7 @@ export default function Profile() {
             },
           }
         );
-  
+
         console.log("Update response:", updateResponse);
         if (updateResponse.status === 200) {
           toast.success("Entertainer updated successfully!");
@@ -327,7 +642,7 @@ export default function Profile() {
         console.log("Creating new entertainer profile");
         const response = await axios.post(
           `${import.meta.env.VITE_API_URL}entertainers`,
-          formData,
+          entertainerData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -335,7 +650,7 @@ export default function Profile() {
           }
         );
         console.log(response);
-        if (response.status === 201 || response.status === "success") {
+        if (response.status === 201 ) {
           toast.success("Entertainer profile created successfully!");
         }
       }
@@ -344,7 +659,7 @@ export default function Profile() {
       toast.error("Failed to submit the form.");
     }
   };
-  
+
   return (
     <>
       <DashLayoutEnter
@@ -353,308 +668,35 @@ export default function Profile() {
       >
         <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
           <Toaster position="top-center" reverseOrder={false} />
-          <div className="row mt-5">
-            <div className="col-md-12">
-              <h2 className="text-secondary text-center">Profile</h2>
-            </div>
-            <div className="row justify-content-center mb-4">
-              <form onSubmit={mediaUpload}>
-                <div className="d-flex justify-content-center">
-                  <div className="card shadow-lg col-11 border-0 rounded p-4">
-                    <div className="card-body">
-                      <h5 className="text-start text-primary mt-2">
-                        Media Uploads
-                      </h5>
-                      <hr className="mb-4" />
+          <div className="container mt-5">
+            <div className="row justify-content-center mb-4 mt-3">
+              <MediaUpload
+                handleFileChange={handleFileChange}
+                handleDeleteHeadshot={handleDeleteHeadshot}
+                handleDeleteImage={handleDeleteImage}
+                handleDeleteVideo={handleDeleteVideo}
+                headshot={headshot}
+                image={image}
+                video={video}
+                fetchMedia={fetchMedia}
+                mediaProp={media}
+                mediaUpload={mediaUpload}
+                onMediaUpdate={(updatedMedia) => setMedia(updatedMedia)}
+              />
 
-                      <div className="row mb-3">
-                        <div className="col-md-12 col-sm-12">
-                          <label className="fw-medium">
-                            Headshot Profile Pic
-                          </label>
-                          <Input
-                            type="file"
-                            name="headshot"
-                            accept="image/*"
-                            onChange={(e) => handleFileChange(e, "headshot")}
-                          />
-                          {headshot && (
-                            <div className="position-relative">
-                              <img
-                                src={URL.createObjectURL(headshot)}
-                                alt="Headshot preview"
-                                className="media-image rounded"
-                                style={{ height: "90px", width: "90px" }}
-                              />
-                              <button
-                                type="button"
-                                className="btn btn-link position-absolute"
-                                onClick={handleDeleteHeadshot}
-                              >
-                                <i className="fa-solid fa-trash-can text-danger"></i>
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="row mt-4">
-                        <div className="col-md-12 col-sm-12">
-                          <label className="fw-bold">Image Upload</label>
-                          <Input
-                            type="file"
-                            name="images"
-                            accept="image/*"
-                            multiple
-                            onChange={(e) => handleFileChange(e, "images")}
-                          />
-                          {images.length > 0 && (
-                            <div className="d-flex flex-wrap gap-3">
-                              {images.map((file, index) => (
-                                <div
-                                  key={index}
-                                  className="position-relative p-2"
-                                >
-                                  <img
-                                    src={URL.createObjectURL(file)}
-                                    alt={`Uploaded image ${index}`}
-                                    className="media-image rounded"
-                                    style={{ height: "90px", width: "90px" }}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-link position-absolute"
-                                    onClick={() => handleDeleteImage(index)}
-                                  >
-                                    <i className="fa-solid fa-trash-can text-danger"></i>
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Video Upload */}
-                      <div className="row mt-4">
-                        <div className="col-md-12 col-sm-12">
-                          <label className="fw-bold">Video Upload</label>
-                          <Input
-                            type="file"
-                            name="videos"
-                            accept="video/*"
-                            multiple
-                            onChange={(e) => handleFileChange(e, "videos")}
-                          />
-                          {videos.length > 0 && (
-                            <div className="d-flex flex-wrap gap-3">
-                              {videos.map((file, index) => (
-                                <div
-                                  key={index}
-                                  className="position-relative p-2"
-                                >
-                                  <video
-                                    src={URL.createObjectURL(file)}
-                                    controls
-                                    className="media-video rounded"
-                                    style={{ height: "90px", width: "90px" }}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-link position-absolute"
-                                    onClick={() => handleDeleteVideo(index)}
-                                  >
-                                    <i className="fa-solid fa-trash-can text-danger"></i>
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="row ">
-                        <div className="col d-flex justify-content-center">
-                          <Button
-                            type="submit"
-                            className="btn-primary w-25 fw-bold"
-                            label="Upload Media"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
-
-              <form onSubmit={handleSubmit} className="mt-5">
-                <div className="d-flex justify-content-center">
-                  <div className="card shadow-lg col-11 border-0 rounded p-4">
-                    <div className="card-body">
-                      <h5 className="text-start text-primary">
-                        Entertainer Details
-                      </h5>
-                      <hr className="mb-4" />
-                      <div className="row mb-3">
-                        <div className="col-md-4">
-                          <label className="fw-medium">Entertainer Name</label>
-                          <Input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            placeholder="Enter your Entertainer Name"
-                            onChange={handleInputChange}
-                          />
-                          {errors.name && (
-                            <div className="text-danger">{errors.name}</div>
-                          )}
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">
-                            Entertainer Main Category
-                          </label>
-                          <Select
-                            options={categories}
-                            value={formData.category || ''}
-                            onChange={handleCategoryChange}
-                            placeholder="Select Category"
-                          />
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">
-                            Entertainer Sub Category
-                          </label>
-                          <Select
-                            options={subcategories}
-                            value={formData.specific_category || ''}
-                            onChange={handleSubCategoryChange}
-                            placeholder="Select Subcategory"
-                            isDisabled={!formData.category}
-                          />
-
-                        </div>
-                      </div>
-
-                      <div className="row mb-3">
-                        <div className="col-md-4">
-                          <label className="fw-medium">Bio</label>
-                          <textarea
-                            className="form-control"
-                            name="bio"
-                            value={formData.bio}
-                            onChange={handleInputChange}
-                            placeholder="Describe your business"
-                          />
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">Contact Number 1</label>
-                          <Input
-                            type="text"
-                            name="phone1"
-                            value={formData.phone1}
-                            placeholder="Enter your contact number."
-                            onChange={handleInputChange}
-                          />
-                          {errors.phone1 && (
-                            <div className="text-danger">{errors.phone1}</div>
-                          )}
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">Contact Number 2</label>
-                          <Input
-                            type="text"
-                            name="phone2"
-                            value={formData.phone2}
-                            placeholder="Enter your another contact number."
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="row mb-3">
-                        <div className="col-md-4">
-                          <label className="fw-medium">Performance Role</label>
-                          <Select
-                            name="performanceRole"
-                            options={performanceRole}
-                            defaultOption="--Select Role--"
-                            value={formData.performanceRole}
-                            onChange={handleInputChange}
-                          />
-                          {errors.performanceRole && (
-                            <div className="text-danger">
-                              {errors.performanceRole}
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">Availability?</label>
-                          <RadioButton
-                            name="availability"
-                            options={options}
-                            value={formData.availability}
-                            onChange={handleInputChange}
-                          />
-                          {errors.availability && (
-                            <div className="text-danger">
-                              {errors.availability}
-                            </div>
-                          )}
-                        </div>
-                        <div className="col-md-4">
-                          <label className="fw-medium">Price Per Event</label>
-                          <Input
-                            type="number"
-                            name="pricePerEvent"
-                            value={formData.pricePerEvent}
-                            placeholder="Rs."
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="row mb-3">
-                        <div className="col-md-4">
-                          <label className="fw-medium">Vaccinated?</label>
-                          <RadioButton
-                            name="vaccinated"
-                            options={options}
-                            value={formData.vaccinated}
-                            onChange={handleInputChange}
-                          />
-                          {errors.vaccinated && (
-                            <div className="text-danger">
-                              {errors.vaccinated}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <h5 className="text-start text-primary mt-2">Links</h5>
-                      <hr className="mb-4" />
-                      <div className="row mb-3">
-                        <label className="fw-medium">Social Media Link</label>
-                        <div className="col-md-6 col-sm-12">
-                          <Input
-                            type="text"
-                            name="socialLinks"
-                            value={formData.socialLinks}
-                            placeholder="Enter your Social Media Link"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      </div>
-                      <div className="row ">
-                        <div className="col d-flex justify-content-center">
-                          <Button
-                            type="submit"
-                            className="btn-primary w-25 fw-bold"
-                            label={isEditing ? "Update" : "Submit"}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </form>
+              <EntertainerDetailsForm
+                formData={formData}
+                errors={errors}
+                categories={categories}
+                subcategories={subcategories}
+                performanceRole={performanceRole}
+                options={options}
+                isEditing={isEditing}
+                handleInputChange={handleInputChange}
+                handleCategoryChange={handleCategoryChange}
+                handleSubCategoryChange={handleSubCategoryChange}
+                handleSubmit={handleSubmit}
+              />
             </div>
           </div>
         </div>

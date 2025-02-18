@@ -37,6 +37,8 @@ export default function EntertainerVenueSection() {
 
     fixAboutUser();
   }, []);
+
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   return (
     <div className="enterWrap container">
     <div className="row enterMargn position-relative">
@@ -62,19 +64,19 @@ export default function EntertainerVenueSection() {
             </div>
             <div className="col-md-6 order-1 order-md-2 ps-0 position-relative">
               <img
-                src="./assets/pique/image/venue-icon.png"
+                src={`${imagePath}venue-icon.png`}
                 alt="venue-icon"
                 className="img-fluid venuiconBH a4"
               />
               <div className="enterImg">
                 <h3 className="heading a3">For Venues</h3>
                 <img
-                  src="./assets/pique/image/fireboX.gif"
+                  src={`${imagePath}fireboX.gif`}
                   alt="fireboX"
                   className="img-fluid fireIMG"
                 />
                 <img
-                  src="./assets/pique/image/venue.png"
+                  src={`${imagePath}venue.png`}
                   alt="venue"
                   className="img-fluid"
                 />
@@ -104,19 +106,19 @@ export default function EntertainerVenueSection() {
             </div>
             <div className="col-md-6 order-1 order-md-2 ps-0 position-relative">
               <img
-                src="./assets/pique/image/entertainers-icon.png"
+                src={`${imagePath}entertainers-icon.png`}
                 alt="venue-icon"
                 className="img-fluid venuiconBH"
               />
               <div className="enterImg">
                 <h3 className="heading a2">For Entertainers</h3>
                 <img
-                  src="./assets/pique/image/fireboX.gif"
+                  src={`${imagePath}fireboX.gif`}
                   alt="fireboX"
                   className="img-fluid fireIMG"
                 />
                 <img
-                  src="./assets/pique/image/enterprise.png"
+                  src={`${imagePath}enterprise.png`}
                   alt="enterprise"
                   className="img-fluid"
                 />

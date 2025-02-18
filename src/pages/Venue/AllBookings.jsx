@@ -74,188 +74,189 @@ export default function AllBookings() {
 
   return (
     <DashLayoutVenue title="All Bookings" description="View all bookings made">
-        <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
-      <div className="row mt-5">
-        <div className="col-md-12">
-          <h2 className="text-secondary text-center mb-4">All Bookings</h2>
-          {loading ? (
-            <p className="text-center">Loading bookings...</p>
-          ) : error ? (
-            <p className="text-center text-danger">{error}</p>
-          ) : bookings.length > 0 ? (
-            <div className="table-responsive">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th>Sr.No.</th>
-                    <th>Entertainer Name</th>
-                    <th>Main Category</th>
-                    <th>Sub Category</th>
-                    <th>Performance Role</th>
-                    <th>Availability</th>
-                    <th>Vaccinated</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bookings.map((booking, index) => {
-                    const entertainer = booking.entertainerUser?.entertainer;
-                    return (
+      <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
+        <div className="row mt-5">
+          <div className="col-md-12">
+            <h2 className="text-secondary text-center mb-4">All Bookings</h2>
+            {loading ? (
+              <p className="text-center">Loading bookings...</p>
+            ) : error ? (
+              <p className="text-center text-danger">{error}</p>
+            ) : bookings.length > 0 ? (
+              <div className="table-responsive">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Sr.No.</th>
+                      <th>Entertainer Name</th>
+                      <th>Main Category</th>
+                      <th>Sub Category</th>
+                      <th>Performance Role</th>
+                      <th>Availability</th>
+                      <th>Price Per Event</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking, index) => (
                       <tr key={booking.id}>
                         <td>{index + 1}</td>
-                        <td>{entertainer ? entertainer.name : "N/A"}</td>
-                        <td>{entertainer ? entertainer.category : "N/A"}</td>
-                        <td>{entertainer ? entertainer.specific_category : "N/A"}</td>
-                        <td>
-                          {entertainer ? entertainer.performanceRole : "N/A"}
-                        </td>
-                        <td>
-                          {entertainer ? entertainer.availability : "N/A"}
-                        </td>
-                        <td>{entertainer ? entertainer.vaccinated : "N/A"}</td>
+                        <td>{booking.name }</td>
+                        <td>{booking.category}</td>
+                        <td>{booking.specific_category}</td>
+                        <td>{booking.performanceRole }</td>
+                        <td>{booking.availability }</td>
+                        <td>{booking.pricePerEvent }</td>
 
                         <td>
-                          {entertainer && (
+                          {booking.status === "accepted" ? (
+                            <span className="text-success fw-bold">
+                              Accepted
+                            </span>
+                          ) : booking.status === "rejected" ? (
+                            <span className="text-danger fw-bold">
+                              Rejected
+                            </span>
+                          ) : (
                             <Button
                               className="btn-info"
                               label="View"
-                              onClick={() => handleViewEntertainer(booking)}
+                              onClick={() => handleBookingResponse("accepted")}
                             />
                           )}
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="alert alert-warning text-center mt-5">
-              No bookings yet.
-            </div>
-          )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="alert alert-warning text-center mt-5">
+                No bookings yet.
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {isModalOpen && selectedBooking && (
-        <>
-          <div
-            className="modal-backdrop fade show"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              zIndex: 1040,
-            }}
-            onClick={handleCloseModal}
-          ></div>
+        {isModalOpen && selectedBooking && (
+          <>
+            <div
+              className="modal-backdrop fade show"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                zIndex: 1040,
+              }}
+              onClick={handleCloseModal}
+            ></div>
 
-          <div
-            className="modal fade show"
-            style={{ display: "block", zIndex: 1050 }}
-            aria-labelledby="entertainerModalLabel"
-            aria-hidden="false"
-          >
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="entertainerModalLabel">
-                    Entertainer Details
-                  </h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={handleCloseModal}
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  {selectedBooking.entertainerUser?.entertainer ? (
-                    <div>
-                      <p>
-                        <strong>Name:</strong>{" "}
-                        {selectedBooking.entertainerUser.entertainer.name}
+            <div
+              className="modal fade show"
+              style={{ display: "block", zIndex: 1050 }}
+              aria-labelledby="entertainerModalLabel"
+              aria-hidden="false"
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="entertainerModalLabel">
+                      Entertainer Details
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={handleCloseModal}
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    {selectedBooking.entertainerUser?.entertainer ? (
+                      <div>
+                        <p>
+                          <strong>Name:</strong>{" "}
+                          {selectedBooking.entertainerUser.entertainer.name}
+                        </p>
+                        <p>
+                          <strong>Performance Role:</strong>{" "}
+                          {
+                            selectedBooking.entertainerUser.entertainer
+                              .performanceRole
+                          }
+                        </p>
+                        <p>
+                          <strong>Type:</strong>{" "}
+                          {selectedBooking.entertainerUser.entertainer.type}
+                        </p>
+                        <p>
+                          <strong>Phone:</strong>{" "}
+                          {selectedBooking.entertainerUser.entertainer.phone1} /{" "}
+                          {selectedBooking.entertainerUser.entertainer.phone2}
+                        </p>
+                        <p>
+                          <strong>Price Per Event:</strong> ₹
+                          {
+                            selectedBooking.entertainerUser.entertainer
+                              .pricePerEvent
+                          }
+                        </p>
+                        <p>
+                          <strong>Availability:</strong>{" "}
+                          {
+                            selectedBooking.entertainerUser.entertainer
+                              .availability
+                          }
+                        </p>
+                        <p>
+                          <strong>Bio:</strong>{" "}
+                          {selectedBooking.entertainerUser.entertainer.bio}
+                        </p>
+                        <p>
+                          <strong>Social Links:</strong>{" "}
+                          {
+                            selectedBooking.entertainerUser.entertainer
+                              .socialLinks
+                          }
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-center text-muted">
+                        No entertainer details available
                       </p>
-                      <p>
-                        <strong>Performance Role:</strong>{" "}
-                        {
-                          selectedBooking.entertainerUser.entertainer
-                            .performanceRole
-                        }
-                      </p>
-                      <p>
-                        <strong>Type:</strong>{" "}
-                        {selectedBooking.entertainerUser.entertainer.type}
-                      </p>
-                      <p>
-                        <strong>Phone:</strong>{" "}
-                        {selectedBooking.entertainerUser.entertainer.phone1} /{" "}
-                        {selectedBooking.entertainerUser.entertainer.phone2}
-                      </p>
-                      <p>
-                        <strong>Price Per Event:</strong> ₹
-                        {
-                          selectedBooking.entertainerUser.entertainer
-                            .pricePerEvent
-                        }
-                      </p>
-                      <p>
-                        <strong>Availability:</strong>{" "}
-                        {
-                          selectedBooking.entertainerUser.entertainer
-                            .availability
-                        }
-                      </p>
-                      <p>
-                        <strong>Bio:</strong>{" "}
-                        {selectedBooking.entertainerUser.entertainer.bio}
-                      </p>
-                      <p>
-                        <strong>Social Links:</strong>{" "}
-                        {
-                          selectedBooking.entertainerUser.entertainer
-                            .socialLinks
-                        }
-                      </p>
-                    </div>
-                  ) : (
-                    <p className="text-center text-muted">
-                      No entertainer details available
-                    </p>
-                  )}
-                </div>
-                <div className="modal-footer">
-                  {selectedBooking?.status === "accepted" ? (
-                    <p className="text-success fw-bold">Accepted</p>
-                  ) : (
-                    <>
-                      <button
-                        type="button"
-                        className="btn btn-success"
-                        onClick={() => handleBookingResponse("accepted")}
-                      >
-                        Confirm Booking
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => handleBookingResponse("rejected")}
-                      >
-                        Decline Booking
-                      </button>
-                    </>
-                  )}
+                    )}
+                  </div>
+                  <div className="modal-footer">
+                    {selectedBooking?.status === "accepted" ? (
+                      <p className="text-success fw-bold">Accepted</p>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="btn btn-success"
+                          onClick={() => handleBookingResponse("accepted")}
+                        >
+                          Confirm Booking
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger"
+                          onClick={() => handleBookingResponse("rejected")}
+                        >
+                          Decline Booking
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
       </div>
-      <PiqueFooter/>  
+      <PiqueFooter />
     </DashLayoutVenue>
   );
 }
