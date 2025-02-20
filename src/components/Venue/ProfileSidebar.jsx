@@ -2,10 +2,11 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 export default function ProfileSidebar() {
+  const name = localStorage.getItem("userName")
   return (
-    <div className="p-3 profile-font">
+    <div className="p-2 profile-font">
       <p className="fs-5 fw-bold mb-1">Account</p>
-      <p className="text-muted small">Olivia Andrews, California, USA</p>
+      <p className="text-muted small">{name}</p>
       <nav className="nav flex-column position-relative">
         {[
           { to: "/user/profile", icon: "fa-user", label: "PROFILE" },

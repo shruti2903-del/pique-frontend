@@ -74,11 +74,11 @@ body {
 
 /* NavBar */
 .mainNavbar .logoMain {
-  height: 45px;
+  height: 50px;
 }
 
 .mainNavbar .nav-item {
-  padding: 5px 20px;
+  padding: 3px 20px;
 }
 
 .mainNavbar .navbar-nav .nav-link {
@@ -96,6 +96,7 @@ body {
   padding: 13px 20px;
   font-weight: 500;
   border: 1px solid #707070;
+  border: none;
 }
 
 .mainNavbar .myBTNB:hover {
@@ -120,7 +121,7 @@ body {
 }
 
 .mainNavbar {
-  background: url(../image/homeBG.jpg);
+  /* background: url(../image/homeBG.jpg); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -1343,6 +1344,10 @@ body {
   width: 100%;
 }
 
+.container{
+  max-width: 1240px;
+}
+
 /* .filter-item {
   cursor: pointer;
   transition: 0.3s;
@@ -1500,7 +1505,7 @@ body {
 .vaccination-badge {
   position: absolute;
   top: -2px; /* Adjust to move the badge higher */
-  left: 28%;
+  left: 50%;
   transform: translateX(-50%);
   padding: 4px 10px;
   border-radius: 12px;
@@ -1585,7 +1590,7 @@ body {
 }
 
 .profile-container {
-  flex: 1; /* Takes the remaining space */
+  flex: 1; 
   padding: 20px;
 }
 
@@ -1619,8 +1624,134 @@ body {
   background-color: #e9ecef;
 } */
 
+/* Default styling for status badges */
+.status-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 15px;
+  text-transform: capitalize;
+}
 
+/* Colors for different statuses */
+.status-confirmed {
+  background-color: #d4edda; /* Light Green */
+  color: #155724;
+}
 
+.status-invited {
+  background-color: #fff3cd; /* Light Yellow */
+  color: #856404;
+}
+
+.status-applied {
+  background-color: #d1ecf1; /* Light Blue */
+  color: #0c5460;
+}
+
+.status-payment-due {
+  background-color: #f8d7da; /* Light Red */
+  color: #721c24;
+}
+
+.status-pending {
+  background-color: #e2e3e5; /* Grey */
+  color: #333;
+}
+
+.venue-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-height: 3em;  
+  line-height: 1.5;
+}
+
+.venue-card{
+  border-radius: 15px;
+}
+
+.icon-font{
+  font-size: 11px;
+}
+
+.btn-light {
+  background-color: #fff !important; /* White background */
+  border: 1px solid #ddd !important; /* Light grey border initially */
+  border-radius: 10px;
+  height: 45px;
+  transition: background-color 0.3s ease, border 0.3s ease;
+}
+
+.btn-light:hover {
+  background-color: #f8f9fa !important; /* Light grey on hover */
+  border: 1px solid #000 !important; /* Black border on hover */
+}
+
+@media (max-width: 768px) {
+  img {
+    aspect-ratio: 3 / 2; /* Adjust for mobile */
+  }
+}
+
+.navHeadings{
+  color: rgb(11, 11, 138);
+  font-size: 20px;
+}
+
+/* Remove default dd-mm-yyyy from date input */
+.custom-date-input::-webkit-datetime-edit-fields-wrapper {
+  color: transparent;
+}
+
+.custom-date-input:focus::-webkit-datetime-edit-fields-wrapper {
+  color: black;
+}
+
+/* Firefox fix */
+.custom-date-input::-moz-placeholder {
+  opacity: 0;
+}
+
+.custom-date-input:-ms-input-placeholder {
+  opacity: 0;
+}
+
+/* Ensure selected date is visible */
+.custom-date-input:not(:placeholder-shown) {
+  color: black;
+}
+
+/* Remove default dd-mm-yyyy from date input */
+.custom-date-input::-webkit-datetime-edit-fields-wrapper,
+.custom-time-input::-webkit-datetime-edit-fields-wrapper {
+  color: transparent;
+}
+
+.custom-date-input:focus::-webkit-datetime-edit-fields-wrapper,
+.custom-time-input:focus::-webkit-datetime-edit-fields-wrapper {
+  color: black;
+}
+
+/* Firefox fix */
+.custom-date-input::-moz-placeholder,
+.custom-time-input::-moz-placeholder {
+  opacity: 0;
+}
+
+.custom-date-input:-ms-input-placeholder,
+.custom-time-input:-ms-input-placeholder {
+  opacity: 0;
+}
+
+/* Ensure selected date/time is visible */
+.custom-date-input:not(:placeholder-shown),
+.custom-time-input:not(:placeholder-shown) {
+  color: black;
+}
+
+.venue-title{
+  color:#ff6600;
+}
 
 
 

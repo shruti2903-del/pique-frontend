@@ -12,7 +12,7 @@ export default function VenueDash() {
         title="Venue Dashboard"
         description="View and manage your work"
       >
-        <div className="container d-flex flex-column min-vh-100 mt-5">
+        <div className="container-fluid d-flex flex-column min-vh-100">
           <SearchBar />
         </div>
         <PiqueFooter />

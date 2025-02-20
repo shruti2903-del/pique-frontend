@@ -24,15 +24,20 @@ const EntertainerCard = ({ entertainer }) => {
   return (
     <>
   
-    <div className="col-md-3 col-sm-6 mb-4">
-      <div className="card card-rounded mb-3" onClick={handleCardClick} style={{ cursor: "pointer" }}>
-        <button className="favorite-btn position-absolute top-0 end-0 m-2 border-0 bg-transparent" onClick={toggleFavorite}>
-          <i className={`bi ${isFavorited ? "bi-heart-fill text-danger" : "bi-heart text-light"}`} style={{ fontSize: "1.5rem" }}></i>
+    <div className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+      <div className="card card-rounded mb-3 rounded-4 overflow-hidden" onClick={handleCardClick} style={{ cursor: "pointer" }}>
+        <button className="favorite-btn position-absolute top-1 me-3 end-0 m-2 border-0 bg-transparent" onClick={toggleFavorite}>
+          <i className={`bi ${isFavorited ? "bi-heart-fill text-danger" : "bi-heart text-light"}`} style={{ fontSize: "1.2rem" }}></i>
         </button>
         <img
           src={headshot || "../assets/pique/image/alfonso4.avif"} 
-          className="card-img img-fluid"
-          style={{ height: "12em", width: "16em", borderRadius:"12px" }}
+          className="card-img"
+          style={{ 
+            // height:"250px",
+            aspectRatio: "4 / 3", 
+            objectFit: "cover",  
+            borderRadius: "12px"
+          }}
           alt={entertainer.name}
         />
           <p className="custom-card-text fw-bold mt-2 mb-0">{entertainer.name}</p>

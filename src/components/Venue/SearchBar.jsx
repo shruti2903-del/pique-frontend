@@ -18,7 +18,9 @@ export default function SearchBar({ updateFilters }) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [entertainers, setEntertainers] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || ""
+  );
 
   const navigate = useNavigate();
 
@@ -94,39 +96,105 @@ export default function SearchBar({ updateFilters }) {
     }
   };
 
+  // const handleSuggestionClick = async (suggestion) => {
+  //   const formattedName = suggestion.name.replace(/\s+/g, "_");
+  //   setSearchQuery(suggestion.name);
+  //   setShowSuggestions(false);
+
+  //   const updatedParams = new URLSearchParams(searchParams);
+  //   updatedParams.set("search", formattedName);
+  //   updatedParams.set("category", suggestion.id);
+  //   setSearchParams(updatedParams);
+
+  //   setSelectedCategory(suggestion.id);
+  //   await fetchEntertainers(suggestion.id);
+  //   // updateFilters({
+  //   //   category: suggestion.id,
+  //   //   search: suggestion.name,
+  //   //   entertainers: entertainers || [],
+  //   // });
+  // };
+
   const handleSuggestionClick = async (suggestion) => {
     setSearchQuery(suggestion.name);
     setShowSuggestions(false);
-
-    const updatedParams = new URLSearchParams(searchParams);
-    updatedParams.set("search", suggestion.name);
-    updatedParams.set("category", suggestion.id);
-    setSearchParams(updatedParams);
-
     setSelectedCategory(suggestion.id);
-    await fetchEntertainers(suggestion.id);
-    updateFilters({
-      category: suggestion.id,
-      search: suggestion.name,
-      entertainers: entertainers || [],
-    });
   };
+
+  // const handleSearchClick = () => {
+  //   if (searchQuery.trim()) {
+  //     const updatedParams = new URLSearchParams(searchParams);
+  //     updatedParams.set("search", searchQuery);
+  //     setSearchParams(updatedParams);
+  //     navigate(`/user/entertainers?${updatedParams.toString()}`);
+  //   }
+  // };
+
+  // const handleSearchClick = () => {
+  //   const formattedQuery = searchQuery.trim().replace(/\s+/g, "_");
+  //   const updatedParams = new URLSearchParams(searchParams);
+
+  //   if (formattedQuery) {
+  //     updatedParams.set("search", formattedQuery);
+  //   } else {
+  //     updatedParams.delete("search"); // Remove only if completely empty
+  //   }
+
+  //   if (selectedCategory) {
+  //     updatedParams.set("category", selectedCategory);
+  //   } else {
+  //     updatedParams.delete("category");
+  //   }
+
+  //   setSearchParams(updatedParams);
+  //   navigate(`/user/entertainers?${updatedParams.toString()}`);
+
+  //   fetchEntertainers(selectedCategory);
+  // };
 
   const handleSearchClick = () => {
-    if (searchQuery.trim()) {
-      const updatedParams = new URLSearchParams(searchParams);
-      updatedParams.set("search", searchQuery);
-      setSearchParams(updatedParams);
-      navigate(`/user/entertainers?${updatedParams.toString()}`);
+    const formattedQuery = searchQuery.trim().replace(/\s+/g, "_");
+    const updatedParams = new URLSearchParams(searchParams);
+
+    if (formattedQuery) {
+      updatedParams.set("search", formattedQuery);
+    } else {
+      updatedParams.delete("search");
     }
+
+    if (selectedCategory) {
+      updatedParams.set("category", selectedCategory);
+    } else {
+      updatedParams.delete("category");
+    }
+
+    setSearchParams(updatedParams);
+    navigate(`/user/entertainers?${updatedParams.toString()}`, {
+      replace: true,
+    }); // Use replace to avoid unnecessary history entry
+
+    fetchEntertainers(selectedCategory);
   };
 
+  useEffect(() => {
+    console.log("Current URL Params:", searchParams.toString());
+  }, [searchParams]);
+
+  // useEffect(() => {
+  //   setSearchQuery(searchParams.get("search") || "");
+  // }, []);
+
+  useEffect(() => {
+    setSelectedCategory(searchParams.get("category") || "");
+  }, [searchParams]);
+
   const fetchEntertainers = async (categoryId) => {
-    if (!categoryId) return;
+    const category = categoryId || searchParams.get("category");
+    if (!category) return;
 
     const apiUrl = `${
       import.meta.env.VITE_API_URL
-    }venues/search/category/${categoryId}`;
+    }venues/search/category/${category}`;
     const token = localStorage.getItem("token");
 
     try {
@@ -140,16 +208,16 @@ export default function SearchBar({ updateFilters }) {
       if (Array.isArray(response.data.data)) {
         setEntertainers(response.data.data);
         updateFilters({
-          category: categoryId,
-          search: searchQuery,
-          entertainers: response.data.data,
+          category,
+          search: searchParams.get("search") || "",
+          // entertainers: response.data.data,
         });
       } else {
         setEntertainers([]);
         updateFilters({
-          category: categoryId,
-          search: searchQuery,
-          entertainers: [],
+          category,
+          search: searchParams.get("search") || "",
+          // entertainers: [],
         });
       }
     } catch (error) {
@@ -162,20 +230,77 @@ export default function SearchBar({ updateFilters }) {
     }
   };
 
+  // useEffect(() => {
+  //   const categoryId = searchParams.get("category");
+  //   if (categoryId) {
+  //     fetchEntertainers(categoryId);
+  //   }
+  // }, [searchParams.get("category")]);
+
   return (
     <>
-      <div className="container-fluid bg-light py-3 mt-5">
+      <div className="container-fluid bg-light p-3">
         <div className="container">
-          <div className="row search-bar">
+          <div className="row search-bar gx-1">
             <div className="col-md-3">
-              <Select
+              {/* <Select
                 name="country"
                 options={countries}
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
                 defaultOption="Any Location"
+                className="form-control profile-font"
                 icon="fa-solid fa-location-dot"
-              />
+              /> */}
+              <div className="row gx-1">
+                <div className="col-md-6 position-relative">
+                  <input
+                    type="date"
+                    className="form-control rounded-3 profile-font custom-date-input"
+                    id="dateInput"
+                    onFocus={(e) => (e.target.style.color = "#000")}
+                    onBlur={(e) => {
+                      if (!e.target.value) e.target.style.color = "transparent";
+                    }}
+                  />
+                  <label
+                    htmlFor="dateInput"
+                    className="position-absolute text-muted"
+                    style={{
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    Date
+                  </label>
+                </div>
+                <div className="col-md-6 position-relative">
+                <label
+                    htmlFor="timeInput"
+                    className="position-absolute text-muted"
+                    style={{
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    Time
+                  </label>
+                  <input
+                    type="time"
+                    className="form-control rounded-3 ps-5 custom-time-input"
+                    id="timeInput"
+                    onFocus={(e) => (e.target.style.color = "#000")}
+                    onBlur={(e) => {
+                      if (!e.target.value) e.target.style.color = "transparent";
+                    }}
+                  />
+                  
+                </div>
+              </div>
             </div>
 
             <div className="col-md-7">
@@ -185,13 +310,17 @@ export default function SearchBar({ updateFilters }) {
                 value={searchQuery}
                 onChange={handleSearchChange}
                 onFocus={() => setShowSuggestions(true)}
+                className="form-control profile-font rounded-3"
               />
               {showSuggestions && suggestions.length > 0 && (
-                <ul className="dropdown-menu show position-absolute w-50 shadow">
+                <ul
+                  className="dropdown-menu show position-absolute shadow"
+                  style={{ width: "48%" }}
+                >
                   {suggestions.map((suggestion, index) => (
                     <li
                       key={suggestion.id || index}
-                      className="dropdown-item"
+                      className="dropdown-item profile-font"
                       onClick={() => handleSuggestionClick(suggestion)}
                       style={{ cursor: "pointer" }}
                     >
@@ -204,7 +333,7 @@ export default function SearchBar({ updateFilters }) {
 
             <div className="col-md-2">
               <Button
-                className="btn btn-dark w-100 rounded-lg"
+                className="btn btn-dark w-100 rounded-3 profile-font"
                 onClick={handleSearchClick}
               >
                 <i className="fa fa-search me-3"></i>

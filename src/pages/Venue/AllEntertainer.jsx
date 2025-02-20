@@ -105,14 +105,20 @@ export default function AllEntertainer() {
       title="All Entertainers"
       description="View and book your preferred entertainer"
     >
-      <div className="d-flex flex-column min-vh-100 mt-5">
+      <div className="d-flex flex-column min-vh-100">
         <SearchBar updateFilters={(filters) => setSearchParams(filters)} />
         <div className="mt-3">
           <FilterNavbar updateFilters={updateFilters} />
         </div>
         <div className="container mt-3">
           <div className="row">
-            {entertainers.length > 0 ? (
+            {loading ? (
+              <div className="d-flex justify-content-center my-5">
+                <div className="spinner-grow text-dark" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : entertainers.length > 0 ? (
               entertainers.map((entertainer) => (
                 <EntertainerCard
                   key={entertainer.id}

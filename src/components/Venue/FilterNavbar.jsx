@@ -17,7 +17,7 @@ export default function FilterNavbar() {
   const options = ["Best Match", "Highest Rated", "Most Popular"];
 
   const categoryIcon = [
-    { name: "Comedy Acts", icon: "fa-masks-theater" },
+    { name: "Comedy Acts", icon: "fa-theater-masks" },
     { name: "Singers", icon: "fa-guitar" },
     { name: "Event DJs", icon: "fa-headphones-simple" },
     { name: "Dance Shows", icon: "fa-circle-play" },
@@ -79,11 +79,11 @@ export default function FilterNavbar() {
                 style={{ cursor: "pointer" }}
               >
                 <i
-                  className={`fa-solid ${
+                  className={`fa-solid fs-5 ${
                     matchingIcon ? matchingIcon.icon : "fa-circle"
                   } ${selectedCategory === category.id ? "active-icon" : ""}`}
                 ></i>
-                <p className="small m-0">{category.name}</p>
+                <p className="icon-font m-0">{category.name}</p>
               </div>
             );
           })}
@@ -91,14 +91,14 @@ export default function FilterNavbar() {
 
         <div className="d-flex align-items-center gap-3">
           <button
-            className="btn btn-light text-muted d-flex"
+            className="btn btn-light d-flex align-items-center gap-2 px-3 py-2 "
             onClick={() => setIsModalOpen(true)}
           >
-            <i className="fa-solid fa-sliders text-muted me-2 mt-1"></i> Filters
+            <i className="fa-solid fa-sliders fs-5 "></i> <span className="icon-font">Filters</span>
           </button>
           <div className="dropdown">
             <button
-              className="btn btn-light dropdown-toggle"
+              className="btn btn-light dropdown-toggle profile-font px-3 py-2"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"

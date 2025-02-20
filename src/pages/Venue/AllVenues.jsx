@@ -7,10 +7,11 @@ import ProfileSidebar from "../../components/Venue/ProfileSidebar";
 import SearchBar from "../../components/Venue/SearchBar";
 import VenueCard from "../../components/Venue/VenueCard";
 import AddVenue from "./AddVenue";
+import VenueList from "./VenueList";
 
 export default function AllVenues() {
   const [venues, setVenues] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [deleteVenueId, setDeleteVenueId] = useState(null);
   const [venueId, setVenueId] = useState(null);
@@ -18,6 +19,7 @@ export default function AllVenues() {
 
   useEffect(() => {
     const fetchVenues = async () => {
+      setLoading(true);
       const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
@@ -30,7 +32,7 @@ export default function AllVenues() {
           }
         );
         console.log(response.data);
-        const data = response.data.venues || []; 
+        const data = response.data.data || []; 
         setVenues(Array.isArray(data) ? data : []);
       } catch (err) {
         setError("Failed to fetch venues");
@@ -58,7 +60,7 @@ export default function AllVenues() {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}venues/${deleteVenueId}`,
+        `${import.meta.env.VITE_API_MEDIA_URL}venues/${deleteVenueId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -79,7 +81,7 @@ export default function AllVenues() {
 
   return (
     <DashLayoutVenue title="Venue List" description="Update and delete your venue.">
-      <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
+      <div className="container-fluid d-flex flex-column min-vh-100">
                   <SearchBar />
                   <div className="d-flex">
                     <div className="sidebar-container">
@@ -87,7 +89,9 @@ export default function AllVenues() {
                     </div>
                     <div className="profile-container">
      
-              <VenueCard venues={venues} />
+              {/* <VenueCard venues={venues} loading={loading} /> */}
+<VenueList venues={venues} loading={loading}/>
+
          
                     </div>
                   </div>

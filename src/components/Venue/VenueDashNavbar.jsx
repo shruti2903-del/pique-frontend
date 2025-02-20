@@ -35,14 +35,14 @@ export default function VenueDashNavbar() {
 
   return (
     <>
-      <div className="container-fluid mainNavbar fixed-top">
+      <div className="container-fluid mt-2 ">
         <div className="row">
           <nav id="navbar1" className="navbar navbar-expand-lg px-4">
             <div className="container">
               {/* <!-- Logo Section --> */}
               <Link className="navbar-brand d-flex align-items-center" to="/user/">
                 <img
-                  src={`${imagePath}logo.png`}
+                  src={`${imagePath}newLogo.png`}
                   alt="logo"
                   className="logoMain"
                 />
@@ -64,7 +64,7 @@ export default function VenueDashNavbar() {
               {/* <!-- Navbar Links --> */}
               <div className="collapse navbar-collapse" id="navbarContent">
                 <ul className="navbar-nav mx-auto mb-2 mb-lg-0 ">
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link
                       className="nav-link active"
                       aria-current="page"
@@ -87,10 +87,12 @@ export default function VenueDashNavbar() {
                     <Link className="nav-link" to="#">
                       Blog
                     </Link>
-                  </li>
+                  </li> */}
+                  <p className="navHeadings">Entertainment | Education | Engagement</p>
                 </ul>
 
                 <div className="d-flex align-items-center ">
+                  <p className="mt-3 modal-font" style={{cursor:"pointer"}} onClick={() => navigate("/user/add")}>Add your Residence<i className="fa-solid fa-globe me-2 ms-2 fs-6"></i></p>
                   <Button
                     className="btn shadow-none border-0 p-0"
                     data-bs-toggle="offcanvas"

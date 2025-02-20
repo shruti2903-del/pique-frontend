@@ -44,7 +44,7 @@ export default function EntertainerVenueSection() {
     <div className="row enterMargn position-relative">
 
       {/* <!-- For Entertainers --> */}
-      <div className="col-md-12 visonWrap mt-5">
+      <div className="col-md-12 visonWrap">
         <div className="aboutUser aboutUser1 enterMain" id="box1">
           <div className="row borderBH align-items-md-center">
             <div className="col-md-6 order-2 order-md-1">

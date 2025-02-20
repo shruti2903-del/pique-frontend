@@ -5,13 +5,13 @@ export default function PiqueNavbar() {
   const imagePath = import.meta.env.VITE_IMAGE_PATH;
   return (
     <>
-    <div className="container-fluid mainNavbar fixed-top">
+    <div className="container-fluid mainNavbar">
       <div className="row">
         <nav id="navbar1" className="navbar navbar-expand-lg px-4">
           <div className="container">
             {/* <!-- Logo Section --> */}
             <Link className="navbar-brand d-flex align-items-center" to="/">
-              <img src={`${imagePath}logo.png`} alt="logo" className="logoMain" />
+              <img src={`${imagePath}newLogo.png`} alt="logo" className="logoMain" />
             </Link>
 
             {/* <!-- Toggle Button for Mobile View --> */}

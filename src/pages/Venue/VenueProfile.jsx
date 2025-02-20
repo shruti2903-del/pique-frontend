@@ -234,7 +234,7 @@ export default function VenueProfile() {
         description="View and manage your profile"
       >
         <Toaster position="top-center" reverseOrder={false} />
-        <div className="container-fluid d-flex flex-column min-vh-100 mt-5">
+        <div className="container-fluid d-flex flex-column min-vh-100">
           <SearchBar />
           <div className="d-flex">
             <div className="sidebar-container">

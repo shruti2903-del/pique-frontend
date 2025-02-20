@@ -3,7 +3,7 @@ import Button from '../Button'
 import { useNavigate } from 'react-router-dom'
 import AddVenue from '../../pages/Venue/AddVenue';
 
-export default function VenueCard({venues}) {
+export default function VenueCard({venues, loading}) {
 const navigate = useNavigate();
 
 const handleAddVenueClick = () => {
@@ -29,25 +29,37 @@ const handleAddVenueClick = () => {
     </div>
     <hr />
 
-    <div className="row">
-        {venues.map((venue) => (
-          <div key={venue.id} className="col-md-3 col-sm-6 mb-4">
-            <div className="card mb-3" style={{ width:"16rem" }}>
-              <img
-                src="../assets/pique/image/venue1.avif"
-                className="card-img-top img-fluid"
-                style={{ height: "10em" }}
-                alt={venue.name}
-              />
-              <div className="div p-2">
-              <p className="profile-font fw-bold mt-2 mb-0">{venue.name}</p>
-              <p className='profile-font fw-semibold'>{venue.addressLine1} , {venue.addressLine2}</p>
-              <p className='profile-font text-secondary'>{venue.description}</p>
-              <Button className="venue-btn btn-sm w-100" type='button' onClick={() => handleEditClick(venue)}><i className="fa-regular fa-pen-to-square me-2"></i>Edit Details</Button>
-              </div>
+    <div className="row d-flex">
+    {loading ? (
+          <div className="d-flex justify-content-center my-5">
+            <div className="spinner-grow text-dark" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
           </div>
-        ))}
+        ) : venues.length > 0 ? (
+          venues.map((venue) => (
+            <div key={venue.id} className="col-md-4 col-sm-12 mb-4">
+              <div className="card venue-card mb-3" style={{ width: "19rem", height: "19rem" }}>
+                <img
+                  src={venue.media.length > 0 ? venue.media[0].url : "../assets/pique/image/venue1.avif"}
+                  className="card-img-top img-fluid"
+                  style={{ height: "10em", borderTopLeftRadius: "15px", borderTopRightRadius: "15px" }}
+                  alt={venue.name}
+                />
+                <div className="div p-2">
+                  <p className="profile-font fw-bold mt-2 mb-0">{venue.name}</p>
+                  <p className="profile-font fw-semibold">{venue.addressLine1}, {venue.addressLine2}</p>
+                  <p className="profile-font text-secondary venue-description">{venue.description}</p>
+                  <Button className="venue-btn btn-sm w-100 mt-auto" type="button" onClick={() => handleEditClick(venue)}>
+                    <i className="fa-regular fa-pen-to-square me-2"></i>Edit Details
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center mt-4">No venues found.</p>
+        )}
       </div>
     
     </>

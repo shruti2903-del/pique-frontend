@@ -12,6 +12,7 @@ export default function BookingPage() {
         venueId: "",
         performanceDate: "",
         performanceTime: "",
+        eventId:7
       });
       const handleChange = (e) => {
         setBookingFormData({
@@ -30,7 +31,7 @@ export default function BookingPage() {
           title="Entertainer Booking Page"
           description="Fill the form details and book the entertainer."
         >
-            <div className="container d-flex flex-column min-vh-100 mt-5">
+            <div className="container d-flex flex-column min-vh-100">
                 <div className="row mt-5">
                     <div className="col-md-12">
                     <Button
