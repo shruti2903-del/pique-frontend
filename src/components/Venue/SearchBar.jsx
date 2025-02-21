@@ -44,9 +44,9 @@ export default function SearchBar({ updateFilters }) {
     fetchCountries();
   }, []);
 
-  useEffect(() => {
-    setSearchText(searchParams.get("search") || "");
-  }, [searchParams]);
+  // useEffect(() => {
+  //   setSearchText(searchParams.get("search") || "");
+  // }, [searchParams]);
 
   const fetchSuggestions = async (query) => {
     if (!query.trim() || query.length < 1) {
@@ -119,6 +119,15 @@ export default function SearchBar({ updateFilters }) {
     setSearchQuery(suggestion.name);
     setShowSuggestions(false);
     setSelectedCategory(suggestion.id);
+
+    const updatedParams = new URLSearchParams(searchParams);
+    updatedParams.set("search", suggestion.name.replace(/\s+/g, "_"));
+    updatedParams.set("category", suggestion.id);
+
+    setSearchParams(updatedParams);
+
+    // Fetch entertainers with category ID
+    fetchEntertainers(suggestion.id);
   };
 
   // const handleSearchClick = () => {
@@ -154,27 +163,29 @@ export default function SearchBar({ updateFilters }) {
 
   const handleSearchClick = () => {
     const formattedQuery = searchQuery.trim().replace(/\s+/g, "_");
-    const updatedParams = new URLSearchParams(searchParams);
-
+    const updatedParams = new URLSearchParams();
+  
     if (formattedQuery) {
       updatedParams.set("search", formattedQuery);
-    } else {
-      updatedParams.delete("search");
     }
-
+  
     if (selectedCategory) {
       updatedParams.set("category", selectedCategory);
-    } else {
-      updatedParams.delete("category");
     }
-
+  
+    const queryString = updatedParams.toString();
+    const newUrl = queryString ? `/user/entertainers?${queryString}` : `/user/entertainers`;
+  
     setSearchParams(updatedParams);
-    navigate(`/user/entertainers?${updatedParams.toString()}`, {
-      replace: true,
-    }); // Use replace to avoid unnecessary history entry
-
-    fetchEntertainers(selectedCategory);
+    navigate(newUrl, { replace: true });
+  
+    console.log("Before fetching entertainers: ", updatedParams.toString());
+    
+    fetchEntertainers(selectedCategory, formattedQuery);
   };
+  
+  
+  
 
   useEffect(() => {
     console.log("Current URL Params:", searchParams.toString());
@@ -208,7 +219,7 @@ export default function SearchBar({ updateFilters }) {
       if (Array.isArray(response.data.data)) {
         setEntertainers(response.data.data);
         updateFilters({
-          category,
+          category: categoryId,
           search: searchParams.get("search") || "",
           // entertainers: response.data.data,
         });
@@ -265,7 +276,7 @@ export default function SearchBar({ updateFilters }) {
                   />
                   <label
                     htmlFor="dateInput"
-                    className="position-absolute text-muted"
+                    className="position-absolute profile-font text-muted"
                     style={{
                       left: "12px",
                       top: "50%",
@@ -277,9 +288,9 @@ export default function SearchBar({ updateFilters }) {
                   </label>
                 </div>
                 <div className="col-md-6 position-relative">
-                <label
+                  <label
                     htmlFor="timeInput"
-                    className="position-absolute text-muted"
+                    className="position-absolute profile-font text-muted"
                     style={{
                       left: "12px",
                       top: "50%",
@@ -291,14 +302,13 @@ export default function SearchBar({ updateFilters }) {
                   </label>
                   <input
                     type="time"
-                    className="form-control rounded-3 ps-5 custom-time-input"
+                    className="form-control rounded-3 profile-font ps-5 custom-time-input"
                     id="timeInput"
                     onFocus={(e) => (e.target.style.color = "#000")}
                     onBlur={(e) => {
                       if (!e.target.value) e.target.style.color = "transparent";
                     }}
                   />
-                  
                 </div>
               </div>
             </div>

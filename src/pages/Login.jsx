@@ -4,10 +4,9 @@ import { Helmet } from "react-helmet-async";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
-import PiqueNavbar from "../components/PiqueComponents/PiqueNavbar";
-import PiqueFooter from "../components/PiqueComponents/PiqueFooter";
 
-const Login = ({ setIsLoggedIn, setRole }) => {
+
+const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -42,8 +41,7 @@ const Login = ({ setIsLoggedIn, setRole }) => {
       localStorage.setItem("status", response.data.data.user.status);
       localStorage.setItem("userName", response.data.data.user.name);
 
-      setIsLoggedIn(true);
-      setRole(role);
+      window.dispatchEvent(new Event("storage"));
       // const status = localStorage.getItem("status");
       // if (response.data.role === "venue" && status === "pending") {
       //   navigate("/statusverification");
@@ -90,7 +88,7 @@ const Login = ({ setIsLoggedIn, setRole }) => {
         <div className="row d-flex justify-content-around mt-5">
           <div className="col-md-6 col-sm-12 d-none d-md-block">
             <img
-              src="./assets/pique/image/login.png"
+              src="../assets/pique/image/login.png"
               className="img-fluid"
               style={{ height: "90%" }}
             />
@@ -98,7 +96,7 @@ const Login = ({ setIsLoggedIn, setRole }) => {
           <div className="col-md-6 col-sm-12">
             <div className="row mt-5 d-flex justify-content-center">
               <img
-                src="./assets/pique/image/logo.png"
+                src="../assets/pique/image/logo.png"
                 className="w-auto mt-5"
                 style={{ height: "40px" }}
               />
@@ -124,7 +122,7 @@ const Login = ({ setIsLoggedIn, setRole }) => {
                     />
                   </div>
 
-                  <div className="row">
+                  <div className="row mt-2">
                     <label className="fw-semibold">Password*</label>
                     <Input
                       type={showPassword ? "text" : "password"}

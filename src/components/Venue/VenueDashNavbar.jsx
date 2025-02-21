@@ -30,7 +30,7 @@ export default function VenueDashNavbar() {
     );
     if (closeBtn) closeBtn.click();
 
-    navigate("//");
+    navigate("/");
   }
 
   return (
@@ -92,7 +92,7 @@ export default function VenueDashNavbar() {
                 </ul>
 
                 <div className="d-flex align-items-center ">
-                  <p className="mt-3 modal-font" style={{cursor:"pointer"}} onClick={() => navigate("/user/add")}>Add your Residence<i className="fa-solid fa-globe me-2 ms-2 fs-6"></i></p>
+                  <p className="mt-3 modal-font" style={{cursor:"pointer"}} onClick={() => navigate("/user/profile")}>Add your Residence<i className="fa-solid fa-globe me-2 ms-2 fs-6"></i></p>
                   <Button
                     className="btn shadow-none border-0 p-0"
                     data-bs-toggle="offcanvas"

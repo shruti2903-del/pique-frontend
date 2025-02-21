@@ -123,134 +123,6 @@ export default function EntertainerDetails() {
           </p>
           <p className="fw-semibold fs-4 mb-0 mt-4">{entertainer.name}</p>
           <div className="row d-flex justify-content-between column-gap-5">
-            {/* <div className="col-md-7 mt-3">
-              {!loading && entertainer ? (
-                <div
-                  id="carouselExampleIndicators"
-                  className="carousel slide"
-                  data-bs-ride="carousel"
-                >
-                  <div className="carousel-indicators">
-                    {entertainer.media
-                      .filter((m) => m.type === "image" || m.type === "video")
-                      .map((_, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          data-bs-target="#carouselExampleIndicators"
-                          data-bs-slide-to={index}
-                          className={index === 0 ? "active" : ""}
-                          aria-current={index === 0 ? "true" : "false"}
-                          aria-label={`Slide ${index + 1}`}
-                        ></button>
-                      ))}
-                  </div>
-
-                  <div className="carousel-inner">
-                    {entertainer?.media?.length > 0 ? (
-                      entertainer.media
-                        .filter((m) => m.type === "image" || m.type === "video")
-                        .map((media, index) => (
-                          <div
-                            key={index}
-                            className={`carousel-item ${
-                              index === 0 ? "active" : ""
-                            }`}
-                          >
-                            {media.type === "image" ? (
-                              <img
-                                src={media.url}
-                                className="d-block w-100 media-content"
-                                alt="Entertainer"
-                              />
-                            ) : (
-                              <video
-                                controls
-                                className="d-block w-100 media-content"
-                              >
-                                <source src={media.url} />
-                                Your browser does not support the video tag.
-                              </video>
-                            )}
-                          </div>
-                        ))
-                    ) : (
-                      <p>No media available</p>
-                    )}
-                  </div>
-
-                  {entertainer.media.length >= 2 && (
-                    <>
-                      <button
-                        className="carousel-control-prev"
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="prev"
-                      >
-                        <span
-                          className="carousel-control-prev-icon"
-                          aria-hidden="true"
-                        ></span>
-                      </button>
-                      <button
-                        className="carousel-control-next"
-                        type="button"
-                        data-bs-target="#carouselExampleIndicators"
-                        data-bs-slide="next"
-                      >
-                        <span
-                          className="carousel-control-next-icon"
-                          aria-hidden="true"
-                        ></span>
-                      </button>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className="d-flex justify-content-center my-5">
-                <div className="spinner-grow text-dark" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-              </div>
-              )}
-
-              <div className="row">
-                <div className="col-md-4 mt-5">
-                  <h4>Booking Info</h4>
-                </div>
-                <div className="col-md-7 mt-5 modal-font">
-                  <div className="row">
-                    <div className="col-md-6 fw-semibold">
-                      <p>Vaccination Status:</p>
-                      <p>Price Per Event:</p>
-                      <p>Performance Role:</p>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{entertainer.vaccinated}</p>
-                      <p>Rs.{entertainer.pricePerEvent}</p>
-                      <p>{entertainer.performanceRole}</p>
-                    </div>
-                  </div>
-                  <hr />
-                  <p className="fw-semibold">About</p>
-                  <p>{entertainer.bio}</p>
-                  <hr />
-                  <div className="row">
-                    <div className="col-md-6 fw-semibold">
-                      <p>Contact Number 1:</p>
-                      <p>Contact Number 2:</p>
-                      <p>Social Links:</p>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{entertainer.phone1}</p>
-                      <p>{entertainer.phone2}</p>
-                      <p>{entertainer.socialLinks}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
             {!loading && entertainer?.media?.length > 0 ? (
               <div className="row">
                 {entertainer?.media?.filter(media => media.type === "image").length > 0 ? (
@@ -370,27 +242,29 @@ export default function EntertainerDetails() {
                 <form onSubmit={handleBookingSubmit}>
                   <div className="row">
                     <div className="col-6">
-                      <p>Show time</p>
+                      <p className="profile-font">Show time</p>
                       <Input
                         type="time"
+                        className="form-control profile-font"
                         name="showTime"
                         value={showTime}
                         onChange={(e) => setShowTime(e.target.value)}
                       />
                     </div>
                     <div className="col-6">
-                      <p>Show Date</p>
+                      <p className="profile-font">Show Date</p>
                       <Input
                         type="date"
+                        className="form-control profile-font"
                         name="showDate"
                         value={showDate}
                         onChange={(e) => setShowDate(e.target.value)}
                       />
                     </div>
                   </div>
-                  <p className="mt-2">Special Notes</p>
+                  <p className="mt-2 profile-font">Special Notes</p>
                   <textarea
-                    className="form-control"
+                    className="form-control profile-font"
                     placeholder="Enter your message here..."
                     rows="4"
                     value={specialNotes}
@@ -398,7 +272,7 @@ export default function EntertainerDetails() {
                     onChange={(e) => setSpecialNotes(e.target.value)}
                   ></textarea>
                   <Button
-                    className="btn-danger w-100 mt-3"
+                    className="btn-danger profile-font rounded-3 w-100 mt-3"
                     type="submit"
                     label="Send Booking Request"
                   />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Button from "../../components/Button";
@@ -9,9 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 import PiqueFooter from "../../components/PiqueComponents/PiqueFooter";
 import SearchBar from "../../components/Venue/SearchBar";
 import ProfileSidebar from "../../components/Venue/ProfileSidebar";
-import { Helmet } from "react-helmet-async";
 
 export default function AddVenue() {
+  const location = useLocation();
+  const venueData = location.state?.venue || {};
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -29,10 +30,6 @@ export default function AddVenue() {
   const [cities, setCities] = useState([]);
   const [countries, setCountries] = useState([]);
   const [errors, setErrors] = useState({});
-  const [headshot, setHeadshot] = useState(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  const [images, setImages] = useState([]);
-  const [videos, setVideos] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
 
@@ -128,78 +125,7 @@ export default function AddVenue() {
     }
   };
 
-  const handleFileChange = async (e, type) => {
-    const files = Array.from(e.target.files);
-    console.log(`File selected for ${type}:`, files);
 
-    if (files.length === 0) {
-      console.log("No file selected.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append(type, files[0]); 
-
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_MEDIA_URL}media/uploads`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log(`Upload response for ${type}:`, response.data);
-
-      if (response.data.status) {
-        // Assuming API returns the file URL
-        const fileUrl = response.data.fileUrl || URL.createObjectURL(files[0]);
-        setHeadshot(fileUrl);
-      }
-    } catch (error) {
-      console.error(`Error uploading ${type}:`, error.response?.data || error.message);
-    }
-  };
-
-
-
-  const handleDeleteImage = (index) => {
-    setImages((prev) => {
-      const updatedImages = prev.filter((_, i) => i !== index);
-      setFormData((prevData) => ({ ...prevData, images: updatedImages }));
-      return updatedImages;
-    });
-  };
-
-  const handleDeleteVideo = (index) => {
-    setVideos((prev) => {
-      const updatedVideos = prev.filter((_, i) => i !== index);
-      setFormData((prevData) => ({ ...prevData, videos: updatedVideos }));
-      return updatedVideos;
-    });
-  };
-
-  const handleDeleteHeadshot = () => {
-    setHeadshot(null);
-    setUploadedImageUrl(""); // Reset uploaded image
-  };
-
-  // const handleFileChange = (e, type) => {
-  //   const files = Array.from(e.target.files);
-  //   console.log("Selected files:", files);
-
-  //   if (type === "headshot" && files.length > 0) {
-  //     setHeadshot(files[0]); // Store the first selected file as the headshot
-  //   } else if (type === "images") {
-  //     setImages((prev) => [...prev, ...files]);
-  //   } else if (type === "videos") {
-  //     setVideos((prev) => [...prev, ...files]);
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -210,18 +136,26 @@ export default function AddVenue() {
 
     const token = localStorage.getItem("token");
 
-    const venueData = {
-      ...formData,
-      city: Number(formData.city),
-      state: Number(formData.state),
-      country: Number(formData.country),
+    const venueFormData = {
+      name: venueData.name || '',
+      description: venueData.description || '',
+      email: formData.email || "",
+      phone: formData.phone || "",
+      addressLine1: formData.addressLine1 || "",
+      addressLine2: formData.addressLine2 || "",
+      zipCode: formData.zipCode || "",
+      city: Number(formData.city) || 0,
+      state: Number(formData.state) || 0,
+      country: Number(formData.country) || 0,
+      isParent: false,
+      parentId: Number(localStorage.getItem('venueId')) || 0,
     };
-    console.log("data to send", venueData);
+    console.log("data to send", venueFormData);
 
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}venues`,
-        venueData,
+        venueFormData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -240,57 +174,11 @@ export default function AddVenue() {
     }
   };
 
-  const mediaUpload = async (e) => {
-    e.preventDefault();
-    if (!formSubmitted) {
-      toast.error("Please submit the form before uploading media.");
-      return;
-    }
-    try {
-      const mediaFormData = new FormData();
 
-      // if (headshot) {
-      //   mediaFormData.append("headshot", headshot);
-      // }
-
-      images.forEach((image) => {
-        mediaFormData.append("images", image);
-      });
-
-      videos.forEach((video) => {
-        mediaFormData.append("videos", video);
-      });
-
-      const venueId = localStorage.getItem("venueId");
-      mediaFormData.append("venueId", venueId);
-
-      const token = localStorage.getItem("token");
-      const mediaUploadResponse = await axios.post(
-        `${import.meta.env.VITE_API_URL}media/uploads`,
-        mediaFormData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      console.log("Media upload response:", mediaUploadResponse.data);
-      toast.success("Media uploaded successfully!");
-      navigate("/user/allvenues");
-    } catch (error) {
-      console.error(
-        "Error uploading media:",
-        error.response?.data || error.message
-      );
-      toast.error("Failed to upload media. Please try again.");
-    }
-  };
 
   return (
     <>
-      <DashLayoutVenue title="Add Venue" description="Add a new venue ">
+      <DashLayoutVenue title="Add Location" description="Add a new venue ">
         <Toaster position="top-center" reverseOrder={false} />
         <div className="container-fluid d-flex flex-column min-vh-100">
           <SearchBar />
@@ -299,31 +187,17 @@ export default function AddVenue() {
               <ProfileSidebar />
             </div>
             <div className="profile-container">
-              <p className="profile-font fw-bold">ADD VENUE</p>
+              <p className="profile-font fw-bold">ADD LOCATION</p>
               <hr />
               <p
                 className="profile-font text-secondary"
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate(-1)}
+                onClick={() => { navigate(-1) }}
               >
-                <i className="fa-solid fa-angle-left me-2"></i>Back to your venues
+                <i className="fa-solid fa-angle-left me-2"></i>Back to your profile
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="row mb-2">
-                  <div className="col-md-6 col-sm-12">
-                    <label className="profile-font fw-semibold">Venue Name*</label>
-                    <Input
-                      type="text"
-                      name="name"
-                      placeholder="Enter Venue Name"
-                      className="form-control profile-font"
-                      value={formData.name}
-                      onChange={handleChange}
-                    />
-                    {errors.name && (
-                      <small className="text-danger">{errors.name}</small>
-                    )}
-                  </div>
                   <div className="col-md-6 col-sm-12">
                     <label className="profile-font fw-semibold">Email*</label>
                     <Input
@@ -338,57 +212,6 @@ export default function AddVenue() {
                       <small className="text-danger">{errors.email}</small>
                     )}
                   </div>
-                </div>
-
-                {/* <div className="row mb-2">
-                  <div className="col-md-6 col-sm-12">
-                    <label className="profile-font fw-bold">
-                      Phone Number*
-                    </label>
-                    <Input
-                      type="text"
-                      name="phone"
-                      placeholder="Enter your phone number"
-                      className="form-control profile-font"
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                    {errors.phone && (
-                      <small className="text-danger">{errors.phone}</small>
-                    )}
-                  </div>
-                  <div className="col-md-6 col-sm-12">
-                    <label className="profile-font fw-bold">
-                      Upload Images*
-                    </label>
-                    <Input
-                      type="file"
-                      name="headshot"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, "headshot")}
-                      className="form-control profile-font"
-                    />
-                    {headshot && (
-                      <div className="position-relative">
-                        <img
-                          src={URL.createObjectURL(headshot)}
-                          alt="Headshot preview"
-                          className="media-image rounded"
-                          style={{ height: "90px", width: "90px" }}
-                        />
-                        <button
-                          type="button"
-                          className="btn btn-link position-absolute"
-                          onClick={handleDeleteHeadshot}
-                        >
-                          <i className="fa-solid fa-trash-can text-danger"></i>
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div> */}
-
-                <div className="row mb-2">
                   <div className="col-md-6 col-sm-12">
                     <label className="profile-font fw-semibold">Phone Number*</label>
                     <Input
@@ -401,56 +224,7 @@ export default function AddVenue() {
                     />
                     {errors.phone && <small className="text-danger">{errors.phone}</small>}
                   </div>
-
-                  <div className="col-md-6 col-sm-12">
-                    <label className="profile-font fw-semibold">Upload Images</label>
-
-                    <div className="custom-file-upload">
-                      <Input
-                        type="file"
-                        name="headshot"
-                        accept="image/*"
-                        id="fileInput"
-                        className="d-none"
-                        onChange={(e) => {
-                          console.log("File input change event triggered");
-                          handleFileChange(e, "headshot");
-                        }}
-                      />
-
-                      <label htmlFor="fileInput" className="form-control profile-font text-center d-flex align-items-center">
-                        {headshot ? (
-                          <>
-                            <img
-                              src={headshot}
-                              alt="Uploaded preview"
-                              className="media-image rounded"
-                              style={{ height: "40px", width: "40px", objectFit: "cover", marginRight: "10px" }}
-                            />
-                            <span>Change Image</span>
-                          </>
-                        ) : ( 
-                          <p className="profile-font text-secondary">
-                            Drag & Drop or <span className="text-primary">Choose image</span> to upload
-                          </p>
-                        )}
-                      </label>
-
-                    </div>
-
-                    {uploadedImageUrl && (
-                      <button
-                        type="button"
-                        className="btn btn-link text-danger mt-2 profile-font"
-                        onClick={handleDeleteHeadshot}
-                      >
-                        <i className="fa-solid fa-trash-can"></i> Remove
-                      </button>
-                    )}
-
-                  </div>
                 </div>
-
 
                 <div className="row mb-2">
                   <div className="col-md-6 col-sm-12">
@@ -550,24 +324,6 @@ export default function AddVenue() {
                     />
                     {errors.zipCode && (
                       <small className="text-danger">{errors.zipCode}</small>
-                    )}
-                  </div>
-                </div>
-                <div className="row mb-2">
-                  <div className="col-md-12">
-                    <label className="profile-font fw-semibold">Description</label>
-                    <Input
-                      type="text"
-                      name="description"
-                      placeholder="Enter description"
-                      className="form-control profile-font"
-                      value={formData.description}
-                      onChange={handleChange}
-                    />
-                    {errors.description && (
-                      <small className="text-danger">
-                        {errors.description}
-                      </small>
                     )}
                   </div>
                 </div>

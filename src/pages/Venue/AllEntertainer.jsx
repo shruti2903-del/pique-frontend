@@ -72,33 +72,29 @@ export default function AllEntertainer() {
 
       fetchEntertainers();
     }
-  }, [searchParams, pageIndex, pageSize]);
+  }, [searchParams, pageIndex]);
+    
 
   const updateFilters = (newFilters) => {
-    const updatedParams = {
-      availability: availability || null,
-      category: selectedCategory || null,
-      search: searchTerm || null,
-      page: 1,
-      pageSize: 10,
-      ...newFilters,
-    };
-
-    Object.keys(updatedParams).forEach((key) => {
-      if (!updatedParams[key] && updatedParams[key] !== 0)
-        delete updatedParams[key];
-    });
-
-    setSearchParams(updatedParams);
+    
+      const updatedParams = new URLSearchParams(searchParams);
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (value) {
+          updatedParams.set(key, value);
+        } else {
+          updatedParams.delete(key);
+        }
+      });
+      setSearchParams(updatedParams);
   };
 
-  const handlePageChange = (newPageIndex) => {
-    setPageIndex(newPageIndex);
-  };
+  // const handlePageChange = (newPageIndex) => {
+  //   setPageIndex(newPageIndex);
+  // };
 
-  useEffect(() => {
-    setFilteredEntertainers(entertainers);
-  }, [entertainers]);
+  // useEffect(() => {
+  //   setFilteredEntertainers(entertainers);
+  // }, [entertainers]);
 
   return (
     <DashLayoutVenue
@@ -126,7 +122,7 @@ export default function AllEntertainer() {
                 />
               ))
             ) : (
-              <p className="text-center">No Entertainers Found.</p>
+              null
             )}
           </div>
         </div>

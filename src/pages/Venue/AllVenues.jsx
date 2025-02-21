@@ -17,31 +17,31 @@ export default function AllVenues() {
   const [venueId, setVenueId] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchVenues = async () => {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}venues`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response.data);
-        const data = response.data.data || []; 
-        setVenues(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError("Failed to fetch venues");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchVenues();
-  }, []);
+  // useEffect(() => {
+  //   const fetchVenues = async () => {
+  //     setLoading(true);
+  //     const token = localStorage.getItem("token");
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_API_URL}venues`,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       console.log(response.data);
+  //       const data = response.data.data || []; 
+  //       setVenues(Array.isArray(data) ? data : []);
+  //     } catch (err) {
+  //       setError("Failed to fetch venues");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchVenues();
+  // }, []);
   
 
   const handleEdit = (id) => {
@@ -90,7 +90,7 @@ export default function AllVenues() {
                     <div className="profile-container">
      
               {/* <VenueCard venues={venues} loading={loading} /> */}
-<VenueList venues={venues} loading={loading}/>
+<VenueList />
 
          
                     </div>
